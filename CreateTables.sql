@@ -15,11 +15,11 @@ Phone_number        INT,
 College             VARCHAR(50),
 Department          VARCHAR(50),
 Major               VARCHAR(50),
-Family_head_ID 		  VARCHAR(9) 		Not Null,
-
-PRIMARY KEY (ID_number),
-FOREIGN KEY(Family_head_ID) references USER(ID_number) on delete cascade
+Family_head_ID      VARCHAR(9),
+PRIMARY KEY (ID_number)
 );
+
+ALTER TABLE USER ADD FOREIGN KEY(Family_head_ID) references USER(ID_number) on delete cascade;
 
 CREATE TABLE ADMINISTRATOR (
 
@@ -53,12 +53,12 @@ PRIMARY KEY (Building_number,Apt_number)
 
 CREATE TABLE RESIDENT (
 
-ID_number               VARCHAR(9)            NOT NULL,
+ID_number               VARCHAR(9)         NOT NULL,
 Admin_staff_ID          VARCHAR(9)         NOT NULL,
 Move_in_date            DATE,
 Check_out_date          DATE,
 Building_number         INT         NOT NULL,
-Apt_number        INT         NOT NULL,
+Apt_number              INT         NOT NULL,
 
 FOREIGN KEY (ID_number) REFERENCES USER (ID_number) on delete cascade,
 primary key (ID_number),
@@ -67,8 +67,8 @@ FOREIGN KEY (Building_number,Apt_number) REFERENCES HOUSING_UNIT(Building_number
 
 CREATE TABLE RENT_UNTIL_DATE (
 
-resident_ID            VARCHAR(9)            NOT NULL,
-Quarterly_rent          INT         NOT NULL,
+resident_ID            VARCHAR(9)   NOT NULL,
+Quarterly_rent         INT          NOT NULL,
 
 PRIMARY KEY (Quarterly_rent),
 FOREIGN KEY (Resident_ID) REFERENCES RESIDENT(ID_number) on delete cascade
@@ -76,7 +76,7 @@ FOREIGN KEY (Resident_ID) REFERENCES RESIDENT(ID_number) on delete cascade
 
 CREATE TABLE APPLICANT (
 
-ID_number				VARCHAR(9)         NOT NULL,
+ID_number		VARCHAR(9)         NOT NULL,
 Acceptance_status       BOOLEAN,
 
 PRIMARY KEY (ID_number),
@@ -85,10 +85,10 @@ FOREIGN KEY (ID_number) REFERENCES USER (ID_number) on delete cascade
 
 CREATE TABLE APPLICATION (
 
-Application_number      INT    		 NOT NULL,
+Application_number      INT    	      NOT NULL,
 Admin_staff_ID          VARCHAR(9)    NOT NULL,
-User_ID_number          VARCHAR(9)     NOT NULL,
-Fee_paid                INT,
+User_ID_number          VARCHAR(9)    NOT NULL,
+Fee_paid                BOOLEAN,
 Admission_status        BOOLEAN,
 
 PRIMARY KEY (Application_number),
@@ -113,7 +113,7 @@ FOREIGN KEY (Application_number) REFERENCES APPLICATION(Application_number) on d
 );
 
 CREATE TABLE MAINTENANCE_REQUEST (
-Request_number          INT     	NOT NULL,
+Request_number          INT           NOT NULL,
 Resident_ID             VARCHAR(9)    NOT NULL,
 Admin_staff_ID          VARCHAR(9)    NOT NULL,
 Issue_desc              VARCHAR(150),
