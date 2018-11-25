@@ -40,17 +40,17 @@ public class HousingClient {
         
         System.out.print("Please enter username: ");
         
-        String username = input.getLine();
+        String username = input.nextLine();
         
         System.out.print("password:");
         
-        String username = input.getLine();
+        String password = input.nextLine();
         /*
         try {
             connection = DriverManager.getConnection(url, username, password);
         } catch (SQLException sqlE) {}
         */
-        // Do resident log-in things
+        // Do resident log-in things -> what are they?
     }
     
     public static void printApplicantTop(){
@@ -67,7 +67,6 @@ public class HousingClient {
         repeat(36, "*");
         
         System.out.println("Welcome Applicant!");
-        
         repeat(10, " ");
         System.out.println("1. Check availability");
         repeat(10, " ");
@@ -79,10 +78,6 @@ public class HousingClient {
         
         int action = promptAction(3);
         
-        if (action == 1 || action == 2){        
-            takeApplicantAction(action);
-        }
-        
         switch (action){
             // case 1: checkAvailability(); -> Query 
             case 2: fillBookingForm();
@@ -91,14 +86,76 @@ public class HousingClient {
         }
     }
     
+    public static void checkAvailability(){
+        // run query
+        // print results
+        
+        System.out.println("The following housing options are available: ");
+        
+        // go back to previous screen
+    }
+    
     public static void fillBookingForm(){
     
-        System.out.println("Please fill out the following information:");
+        System.out.println("Please fill out the following information:\n");
         
+        Scanner input = new Scanner(System.in);
         
-    
+        System.out.println("User information");
+        System.out.print("Username: ");
+        String username = input.nextLine(); // check if taken?
+                
+        System.out.print("\nPassword: ");
+        String password = input.nextLine();
+        
+        System.out.print("\nStudent ID: ");
+        String ID = input.nextLine();
+        
+        System.out.print("\nName: ");
+        String name = input.nextLine();
+        
+        System.out.print("\nGender: ");
+        String gender = input.nextLine();
+        
+        System.out.print("\nStudent status: ");
+        String student_status = input.nextLine();
+        
+        System.out.print("\nMarital status: ");
+        String marital_status = input.nextLine();
+        
+        System.out.print("\nAddress: ");
+        String address = input.nextLine();
+        
+        System.out.print("\nPhone number: ");
+        String Phone_number = input.nextLine();
+        
+        System.out.print("\nCollege: "); // validation?
+        String college = input.nextLine();
+        
+        System.out.print("\nDepartment: "); // validation?
+        String department = input.nextLine();
+        
+        System.out.print("\nMajor: "); // validation?
+        String major = input.nextLine();
+        
+        System.out.print("\nFamily head's SSN: ");
+        String family_headSSN = input.nextLine();
+        
+        System.out.println("Housing preferences"); // how to handle 1, 2, 3?
+        
+        System.out.print("\nHow many bedrooms?");
+        int bedrooms = input.nextInt();
+        
+        System.out.print("\nWhat type of housing?"); // how to handle input?
+        String type = input.nextLine(); // translate input
+        
+        System.out.print("\nWhich building?");
+        int building_number = input.nextInt();
+        
+        // add information to database, assign application number?
+        // have them pay fee
+        return; // go back to applicant page
     }
-
     
     public static void printAdminTop(){
         repeat(36, "*");
@@ -150,6 +207,21 @@ public class HousingClient {
         
         int action = promptAction(5);
         
+        Scanner input = new Scanner(System.in);
+        boolean valid = false;
+        int action = 0;
+        
+        while (!valid){
+            action = input.nextInt();
+            
+            if (action == 5){
+                valid = true;
+            }
+            System.out.println("Please enter a valid action: ");
+        }
+    
+        return action;
+        
         switch (action){
             // case 1: 
             // case 2:
@@ -159,20 +231,6 @@ public class HousingClient {
         }
     
     }
-    
-        
-    public static void takeApplicationAction(int action){
-        
-        /*
-        The applicant should fill up a form with all the required details 
-        including the options the available type of housing that he/ she 
-        can choose from. Also, he should be able to list 3 preferences and 
-        preferred roommate if he/she likes to.
-        */
-    
-    }
-    
-    // public static void printResidentTop(){}
     
     public static int promptAction(int max){
         boolean valid = false;
@@ -193,41 +251,6 @@ public class HousingClient {
         return value;
     }
     
-    public static void adminAction(int action){
-        /*
-        repeat(10, " ");
-        System.out.println("1. Manage Residents");
-        repeat(10, " ");
-        System.out.println("2. Manage Applicants");
-        repeat(10, " ");
-        System.out.println("3. Demographic Studies");
-        repeat(10, " ");
-        System.out.println("4. Manage Maintenance orders");
-        repeat(10, " ");
-        System.out.println("5. Administrative Reports");
-        repeat(10, " ");
-        System.out.println("6. Quit");
-        */
-        
-        if (action == 5){
-            repeat(10, " ");
-            System.out.println("1. Housing department reports");
-            repeat(10, " ");
-            System.out.println("2. Applicants Reports");
-            repeat(10, " ");
-            System.out.println("3. Resident Reports");
-            repeat(10, " ");
-            System.out.println("4. Maintenance department reports");
-
-            int queryChoice = getAction(4);
-            
-        } else {
-            
-        
-        }
-        
-    }
-    
     public static void repeat(int num, String str){
         
         for (int i = 0; i <= num; i++){
@@ -235,6 +258,24 @@ public class HousingClient {
         }
         
         System.out.println();
+    }
+   
+    public static int getAction(int max){
+    
+        Scanner input = new Scanner(System.in);
+        boolean valid = false;
+        int action = 0;
+        
+        while (!valid){
+            action = input.nextInt();
+            
+            if (action > 0 && action <= max){
+                valid = true;
+            }
+            System.out.println("Please enter a valid action from 1 to " + max);
+        }
+    
+        return action;
     }
    
    
