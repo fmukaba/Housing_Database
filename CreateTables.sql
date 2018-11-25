@@ -86,7 +86,7 @@ Admission_status        BOOLEAN,
 
 PRIMARY KEY (Application_number),
 FOREIGN KEY  (Admin_staff_ID) REFERENCES ADMINISTRATOR(Staff_ID) on delete cascade,
-FOREIGN KEY (ID_number) REFERENCES USER(ID_number) on delete cascade
+FOREIGN KEY (User_ID_number) REFERENCES USER(ID_number) on delete cascade
 );
 
 CREATE TABLE HOUSING_PREFERENCE (
