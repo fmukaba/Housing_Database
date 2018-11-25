@@ -3,35 +3,50 @@ import java.util.*;
 public class HousingClient {
 
     public static void main(String args[]){
-    
+
         printMainMenu();
             
     }
     
     public static void printMainMenu(){
-        repeat(36, "*");
+    
+        int action = 0;
+        while (action != 4){
         
-        System.out.println("Welcome to the Housing System");        
-        repeat(10, " ");
-        System.out.println("1. Resident Login");
-        repeat(10, " ");
-        System.out.println("2. Applicant Registration/Apply");
-        repeat(10, " ");
-        System.out.println("3. Admin");
-        repeat(10, " ");
-        System.out.println("4. Quit\n");
-        
-        
-        int action = promptAction(4);
-        
-        switch (action){
-            case 1: residentLogIn();
-            case 2: printApplicantTop();
-            case 3: printAdminTop();
-            case 4: return;
-        
+            repeat(36, "*");
+            
+            System.out.println("Welcome to the Housing System");        
+            repeat(10, " ");
+            System.out.println("1. Resident Login");
+            repeat(10, " ");
+            System.out.println("2. Applicant Registration/Apply");
+            repeat(10, " ");
+            System.out.println("3. Admin");
+            repeat(10, " ");
+            System.out.println("4. Quit\n");
+            
+            
+            action = promptAction(4);
+            
+            switch (action){
+                case 1: 
+                    residentLogIn();
+                    break;
+                
+                case 2: 
+                    printApplicantTop();
+                    break;
+                    
+                case 3: 
+                    printAdminTop();
+                    break;
+                    
+                case 4: 
+                    return;
+            
+            }
         }
-    }
+   }
     
     public static void residentLogIn(){
         
@@ -62,29 +77,38 @@ public class HousingClient {
         c. Receive confirmation message
         d. After receiving confirmation can login to Residents login option in the main menu
         */
+        int action = 0;
+        while (action != 3){
+            
+            repeat(36, "*");
         
-        repeat(36, "*");
-        
-        System.out.println("Welcome Applicant!");
-        repeat(10, " ");
-        System.out.println("1. Check availability");
-        repeat(10, " ");
-        System.out.println("2. Submit booking request");
-        repeat(10, " ");
-        System.out.println("3. Back to previous menu");
-        
-        // repeat(36, "*");
-        
-        int action = promptAction(3);
-        
-        switch (action){
-            // case 1: checkAvailability(); -> Query 
-            case 2: fillBookingForm();
-            case 3: printMainMenu();
-
+            System.out.println("Welcome Applicant!");
+            repeat(10, " ");
+            System.out.println("1. Check availability");
+            repeat(10, " ");
+            System.out.println("2. Submit booking request");
+            repeat(10, " ");
+            System.out.println("3. Back to previous menu\n");
+            
+            // repeat(36, "*");
+            
+            action = promptAction(3);
+            
+            switch (action){
+                // case 1: 
+                    // checkAvailability(); -> Query 
+                    // break;
+                case 2: 
+                    fillBookingForm();
+                    break;
+                case 3: 
+                    return;
+    
+            }
         }
     }
     
+    // TASK 1
     public static void checkAvailability(){
         // run query
         // print results
@@ -160,73 +184,88 @@ public class HousingClient {
     }
     
     public static void printAdminTop(){
-        repeat(36, "*");
-        
-        System.out.println("Welcome to Bellevue College Housing System");
-        System.out.println("Administrators Staff");
-        
-        repeat(10, " ");
-        System.out.println("1. Manage Residents");
-        repeat(10, " ");
-        System.out.println("2. Manage Applicants");
-        repeat(10, " ");
-        System.out.println("3. Demographic Studies");
-        repeat(10, " ");
-        System.out.println("4. Manage Maintenance orders");
-        repeat(10, " ");
-        System.out.println("5. Administrative Reports");
-        repeat(10, " ");
-        System.out.println("6. Back to previous menu");
-        
+    
         int action = 0;
-        
-        while (!valid){
-            action = input.nextInt();
+        while (action != 6){
+            repeat(36, "*");
             
-            if (action == 5 || action == 6){
-                valid = true;
+            System.out.println("Welcome to Bellevue College Housing System");
+            System.out.println("Administrators Staff");
+            
+            repeat(10, " ");
+            System.out.println("1. Manage Residents");
+            repeat(10, " ");
+            System.out.println("2. Manage Applicants");
+            repeat(10, " ");
+            System.out.println("3. Demographic Studies");
+            repeat(10, " ");
+            System.out.println("4. Manage Maintenance orders");
+            repeat(10, " ");
+            System.out.println("5. Administrative Reports");
+            repeat(10, " ");
+            System.out.println("6. Back to previous menu\n");
+                    
+            Scanner input = new Scanner(System.in);
+            boolean valid = false;
+            
+            while (!valid){
+                action = input.nextInt();
+                
+                if (action == 5 || action == 6){
+                    valid = true;
+                } else {
+                    System.out.println("Please enter a valid action: ");
+                }
             }
-            System.out.println("Please enter a valid action: ");
+            
+            switch (action){
+                case 5: 
+                    printReportsTop();
+                    break;
+                case 6: 
+                    return;
+            }
         }
-        
-        switch (action){
-            case 5: printReportsTop();
-            case 6: printMainMenu();
-        }
+        return;   
     }
     
     public static void printReportsTop(){
-    
-        repeat(36, "*");
-        System.out.println("Administrative Reports");
-        repeat(10, " ");
-        System.out.println("1. Housing department reports");
-        repeat(10, " ");
-        System.out.println("2. Applicants Reports");
-        repeat(10, " ");
-        System.out.println("3. Resident Reports");
-        repeat(10, " ");
-        System.out.println("4. Maintenance department reports");
-        repeat(10, " ");
-        System.out.println("5. Quit");
-                
-        Scanner input = new Scanner(System.in);
-        boolean valid = false;
         int action = 0;
-        
-        while (!valid){
-            action = input.nextInt();
+
+        while (action != 5){
+            repeat(36, "*");
+            System.out.println("Administrative Reports");
+            repeat(10, " ");
+            System.out.println("1. Housing department reports");
+            repeat(10, " ");
+            System.out.println("2. Applicants Reports");
+            repeat(10, " ");
+            System.out.println("3. Resident Reports");
+            repeat(10, " ");
+            System.out.println("4. Maintenance department reports");
+            repeat(10, " ");
+            System.out.println("5. Quit");
+                    
+            Scanner input = new Scanner(System.in);
+            boolean valid = false;
             
-            if (action == 5 || action == 4){
-                valid = true;
+            while (!valid){
+                action = input.nextInt();
+                
+                if (action == 4 || action == 5){
+                    valid = true;
+                }
+                System.out.println("Please enter a valid action: ");
             }
-            System.out.println("Please enter a valid action: ");
+                
+            switch (action){
+                // case 4: 
+                    // runReports(); TASK TWO
+                case 5: 
+                    return; //printAdminTop();
+            }
         }
-            
-        switch (action){
-            // case 4: runReports(); TASK TWO
-            case 5: printAdminTop();
-        }
+        return;
     
     }
     
@@ -283,6 +322,4 @@ public class HousingClient {
     
         return action;
     }
-   
-   
 }
