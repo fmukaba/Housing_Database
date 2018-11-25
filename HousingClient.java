@@ -19,9 +19,8 @@ public class HousingClient {
         repeat(10, " ");
         System.out.println("3. Admin");
         repeat(10, " ");
-        System.out.println("4. Quit");
+        System.out.println("4. Quit\n");
         
-        repeat(36, "*");
         
         int action = promptAction(4);
         
@@ -72,7 +71,7 @@ public class HousingClient {
         repeat(10, " ");
         System.out.println("2. Submit booking request");
         repeat(10, " ");
-        System.out.println("3. Quit");
+        System.out.println("3. Back to previous menu");
         
         // repeat(36, "*");
         
@@ -81,7 +80,7 @@ public class HousingClient {
         switch (action){
             // case 1: checkAvailability(); -> Query 
             case 2: fillBookingForm();
-            case 3: return;
+            case 3: printMainMenu();
 
         }
     }
@@ -141,7 +140,7 @@ public class HousingClient {
         System.out.print("\nFamily head's SSN: ");
         String family_headSSN = input.nextLine();
         
-        System.out.println("Housing preferences"); // how to handle 1, 2, 3?
+        System.out.println("\nHousing preferences"); // how to handle 1, 2, 3?
         
         System.out.print("\nHow many bedrooms?");
         int bedrooms = input.nextInt();
@@ -152,9 +151,12 @@ public class HousingClient {
         System.out.print("\nWhich building?");
         int building_number = input.nextInt();
         
+        System.out.print("\nRoommate ID: ");
+        int roommate_Id = input.nextInt();
+        
         // add information to database, assign application number?
         // have them pay fee
-        return; // go back to applicant page
+        printApplicantTop(); // go back to applicant page
     }
     
     public static void printAdminTop(){
@@ -174,19 +176,22 @@ public class HousingClient {
         repeat(10, " ");
         System.out.println("5. Administrative Reports");
         repeat(10, " ");
-        System.out.println("6. Quit");
+        System.out.println("6. Back to previous menu");
         
-        repeat(36, "*");
+        int action = 0;
         
-        int action = promptAction(6);
+        while (!valid){
+            action = input.nextInt();
+            
+            if (action == 5 || action == 6){
+                valid = true;
+            }
+            System.out.println("Please enter a valid action: ");
+        }
         
         switch (action){
-            // case 1: 
-            // case 2:
-            // case 3:
-            // case 4: 
             case 5: printReportsTop();
-            case 6: return;
+            case 6: printMainMenu();
         }
     }
     
@@ -204,9 +209,7 @@ public class HousingClient {
         System.out.println("4. Maintenance department reports");
         repeat(10, " ");
         System.out.println("5. Quit");
-        
-        int action = promptAction(5);
-        
+                
         Scanner input = new Scanner(System.in);
         boolean valid = false;
         int action = 0;
@@ -214,28 +217,31 @@ public class HousingClient {
         while (!valid){
             action = input.nextInt();
             
-            if (action == 5){
+            if (action == 5 || action == 4){
                 valid = true;
             }
             System.out.println("Please enter a valid action: ");
         }
-    
-        return action;
-        
+            
         switch (action){
-            // case 1: 
-            // case 2:
-            // case 3:
-            // case 4: runReports();
-            case 5: return;
+            // case 4: runReports(); TASK TWO
+            case 5: printAdminTop();
         }
     
+    }
+    
+    // TASK 2:
+    public static void runReports(){
+        System.out.println("Active maintenance requests: ");
+        // Run the query, show results here
     }
     
     public static int promptAction(int max){
         boolean valid = false;
         Scanner input = new Scanner(System.in);
         int value = 0;
+       
+        repeat(36, "*");
         
         while (!valid){
             System.out.println("Please select an option: ");
