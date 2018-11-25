@@ -47,6 +47,7 @@ Married_couples_allowed BOOLEAN,
 Bed_number              INT,
 Housing_type            VARCHAR(50),
 Occupation_status       BOOLEAN,
+Price_quarter		INT,
 
 PRIMARY KEY (Building_number,Apt_number)
 );
@@ -59,19 +60,11 @@ Move_in_date            DATE,
 Check_out_date          DATE,
 Building_number         INT         NOT NULL,
 Apt_number              INT         NOT NULL,
+Rent_till_date          INT,
 
 FOREIGN KEY (ID_number) REFERENCES USER (ID_number) on delete cascade,
 primary key (ID_number),
 FOREIGN KEY (Building_number,Apt_number) REFERENCES HOUSING_UNIT(Building_number,Apt_number) on delete cascade
-);
-
-CREATE TABLE RENT_UNTIL_DATE (
-
-resident_ID            VARCHAR(9)   NOT NULL,
-Quarterly_rent         INT          NOT NULL,
-
-PRIMARY KEY (Quarterly_rent),
-FOREIGN KEY (Resident_ID) REFERENCES RESIDENT(ID_number) on delete cascade
 );
 
 CREATE TABLE APPLICANT (
@@ -96,19 +89,14 @@ FOREIGN KEY  (Admin_staff_ID) REFERENCES ADMINISTRATOR(Staff_ID) on delete casca
 FOREIGN KEY (ID_number) REFERENCES USER(ID_number) on delete cascade
 );
 
-CREATE TABLE VILLAGE_PREFERENCE (
-Application_number      INT     NOT NULL,
-Preference              VARCHAR(150) NOT NULL,
-
-PRIMARY KEY (Preference),
-FOREIGN KEY (Application_number) REFERENCES APPLICATION(Application_number) on delete cascade
-);
-
 CREATE TABLE HOUSING_PREFERENCE (
 Application_number      INT     NOT NULL,
-Preference              VARCHAR(150) NOT NULL,
+Building_preference     TINYINT,
+Housing_type_preference VARCHAR(50),
+Bedroom_preference	TINYINT,
+Order_of_preference     TINYINT,
+Roommate_preference     VARCHAR(150),
 
-PRIMARY KEY (Preference),
 FOREIGN KEY (Application_number) REFERENCES APPLICATION(Application_number) on delete cascade
 );
 
