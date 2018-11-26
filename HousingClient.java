@@ -1,3 +1,38 @@
+// APPLICANT:
+// Combine check availability and Book/application
+// Print out a numbered list of query results for available rooming options
+// Take in user input first, second, third availability
+// Take in rest of application
+
+// USER TABLE:
+// Add people who
+
+// USERS:
+// Make all residents ->
+
+// Catch exceptions in the client
+
+// QUERIES:
+// Take Array of Housing info, format & display
+// Take user input, translate to ArrayList of preference Housing Units
+// Add married couples boolean
+// Does applicant info match one of their preferences? If so, make it so that they are a resident there
+
+// Need to match preference with what's available ->
+
+// AVAILABILITY:
+// Housing_unit -> if available, not full = 0; full = 1
+// Showing results -> change in housing unit too
+//    Building number, no of bedrooms, type, rent, married couples -> number item
+//    Ask preferences 1, 2, 3 -> corresponds with numbered query results
+// After: type in user information -> add that user to user table
+// PRINT IT TO THE CONSOLE WITH THE INDEX FROM AN ARRAYLIST
+// Then match them
+
+// All try-catch in client
+
+// Refactor repeat() to centerText()
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
@@ -53,7 +88,7 @@ public class HousingClient {
         }
     }
 
-    public static void residentLogIn() {
+    public static void residentLogIn() throws SQLException {
 
         Scanner input = new Scanner(System.in);
 
@@ -89,22 +124,17 @@ public class HousingClient {
 
             System.out.println("Welcome Applicant!");
             repeat(10, " ");
-            System.out.println("1. Get availability and enter housing preference");
+            System.out.println("1. Get started!");
             repeat(10, " ");
-            System.out.println("2. Submit booking request");
-            repeat(10, " ");
-            System.out.println("3. Back to previous menu\n");
+            System.out.println("2. Back to previous menu\n");
 
             // repeat(36, "*");
 
-            action = promptAction(3);
+            action = promptAction(2);
 
             switch (action) {
                 case 1:
-                    checkAvailability();
-                    break;
-                case 2:
-                    fillBookingForm();
+                    getPreferences();
                     break;
                 case 3:
                     return;
@@ -114,11 +144,16 @@ public class HousingClient {
     }
 
     // TASK 1
-    public static void checkAvailability() throws SQLException {
+    public static ArrayList<int> getPreferences() throws SQLException {
         // run query
         // print results
 
+<<<<<<< HEAD
         // user input -- number of bedrooms
+=======
+        Scanner input = new Scanner(System.in);
+        int bedrooms = 0;
+>>>>>>> 67de3aedd594f5bb03d9dc64bb0a2f2e63eec538
 
         System.out.println("The following housing options are available: ");
         ArrayList<HousingUnit> hu = hs.checkAvailability(bedrooms); // returns array of strings
@@ -130,74 +165,43 @@ public class HousingClient {
         }
 
         // can totally be changed -- just wanted to think it out
-        String s1 = readEntry("List the index of your first preference:");
-        String s2 = readEntry("List the index of your second preference:");
-        String s3 = readEntry("List the index of your third preference");
+        System.out.println("Please enter the index of your preferences: ");
+        int pref1 = readInt("Top choice: ", index);
+        int pref2 = readInt("Second choice: ", index);
+        int pref3 = readInt("Third choice: ", index);
 
         //construct array of preferences to be sent to backend
+        ArrayList<int> preferences = new ArrayList<int>(Arrays.asList(pref1, pref2, pref3));
+
 
         //go back to previous screen
     }
 
-    public static void fillBookingForm() {
+    public static void fillBookingForm() throws SQLException {
 
         System.out.println("Please fill out the following information:\n");
 
         Scanner input = new Scanner(System.in);
 
         System.out.println("User information");
-        System.out.print("Username: ");
-        String username = input.nextLine(); // check if taken?
 
-        System.out.print("\nPassword: ");
-        String password = input.nextLine(); // check twice for same password?
+        String username = readString("Username: ");
+        String password = readString("Password: ");
+        String SID = readString("Student ID: ");
+        String name = readString("Name: ");
+        String gender = readString("Gender: ");
+        String student_status = readString("Student status: ");
+        String marital_status = readString("Marital status: ");
+        String address = readString("Address: ");
+        String college = readString("College: ");
+        String department = readString("Department: ");
+        String major = readString("Major: ");
+        String family_headSSN = readString("Family head's SSN: ");
+        String roommate = readString("Roommate ID: ");
 
-        System.out.print("\nStudent ID: ");
-        String ID = input.nextLine();
+        ArrayList<int> preferences = getPreferences();
 
-        System.out.print("\nName: ");
-        String name = input.nextLine();
-
-        System.out.print("\nGender: ");
-        String gender = input.nextLine();
-
-        System.out.print("\nStudent status: ");
-        String student_status = input.nextLine();
-
-        System.out.print("\nMarital status: ");
-        String marital_status = input.nextLine();
-
-        System.out.print("\nAddress: ");
-        String address = input.nextLine();
-
-        System.out.print("\nPhone number: ");
-        String Phone_number = input.nextLine();
-
-        System.out.print("\nCollege: "); // validation?
-        String college = input.nextLine();
-
-        System.out.print("\nDepartment: "); // validation?
-        String department = input.nextLine();
-
-        System.out.print("\nMajor: "); // validation?
-        String major = input.nextLine();
-
-        System.out.print("\nFamily head's SSN: ");
-        String family_headSSN = input.nextLine();
-
-        System.out.println("\nHousing preferences"); // how to handle 1, 2, 3?
-
-        System.out.print("\nWhich building?");
-        int building_number = input.nextInt();
-
-        System.out.print("\nHow many bedrooms?");
-        int bedrooms = input.nextInt();
-
-        System.out.print("\nWhat type of housing?"); // how to handle input?
-        String type = input.nextLine(); // translate input
-
-        System.out.print("\nRoommate ID: ");
-        int roommate_Id = input.nextInt();
+        hs.bookHousing(SID, preferences);
 
         // add information to database, assign application number?
         // have them pay fee
@@ -250,7 +254,7 @@ public class HousingClient {
         return;
     }
 
-    public static void printReportsTop() {
+    public static void printReportsTop() throws SQLException {
         int action = 0;
 
         while (action != 5) {
@@ -317,6 +321,43 @@ public class HousingClient {
         return value;
     }
 
+    public static int readInt(String prompt, int max) {
+        boolean valid = false;
+        Scanner input = new Scanner(System.in);
+        int value = 0;
+
+        while (!valid) {
+            System.out.println("Please select an option: ");
+            if (input.hasNextInt()) {
+                value = input.nextInt();
+            }
+
+            if (value > 0 && value <= max) {
+                valid = true;
+            }
+        }
+        return value;
+    }
+
+    public static String readString(String prompt) {
+        boolean valid = false;
+        Scanner input = new Scanner(System.in);
+        String output = "";
+
+        System.out.print(prompt);
+
+        while (!valid) {
+            if (input.hasNext()) {
+                value = input.nextLine();
+                valid = true;
+            } else {
+                System.out.println("Please enter valid input");
+            }
+        }
+        System.out.println();
+        return output;
+    }
+
     public static void repeat(int num, String str) {
 
         for (int i = 0; i <= num; i++) {
@@ -344,23 +385,24 @@ public class HousingClient {
         return action;
     }
 
-    // Prompts the user and returns the given input
-    static String readEntry(String prompt) {
-        try {
-            StringBuffer buffer = new StringBuffer();
-            System.out.print(prompt);
-            System.out.flush();
-            int c = System.in.read();
-            while(c != '\n' && c != -1) {
-                buffer.append((char)c);
-                c = System.in.read();
+    /*
+        // Prompts the user and returns the given input
+        static String readEntry(String prompt) {
+            try {
+                StringBuffer buffer = new StringBuffer();
+                System.out.print(prompt);
+                System.out.flush();
+                int c = System.in.read();
+                while(c != '\n' && c != -1) {
+                    buffer.append((char)c);
+                    c = System.in.read();
+                }
+                return buffer.toString().trim();
+            } catch (IOException e) {
+                return "";
             }
-            return buffer.toString().trim();
-        } catch (IOException e) {
-            return "";
         }
-    }
-
+    */
     static void centerText(String text, int width) {
         int cushion = (width - text.length())/2;
         for (int i = 0; i < cushion; i++) {
@@ -368,6 +410,4 @@ public class HousingClient {
         }
         System.out.println(text);
     }
-
-
 }
