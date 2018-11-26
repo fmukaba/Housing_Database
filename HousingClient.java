@@ -19,11 +19,9 @@
 // Does applicant info match one of their preferences? If so, make it so that they are a resident there
 
 // Need to match preference with what's available ->
-//
 
 // AVAILABILITY:
 // Housing_unit -> if available, not full = 0; full = 1
-// Ask number of bedrooms -> IN CHECKAVAILABILITY() list queries:
 // Showing results -> change in housing unit too
 //    Building number, no of bedrooms, type, rent, married couples -> number item
 //    Ask preferences 1, 2, 3 -> corresponds with numbered query results
@@ -90,7 +88,7 @@ public class HousingClient {
         }
     }
 
-    public static void residentLogIn() {
+    public static void residentLogIn() throws SQLException {
 
         Scanner input = new Scanner(System.in);
 
@@ -126,22 +124,17 @@ public class HousingClient {
 
             System.out.println("Welcome Applicant!");
             repeat(10, " ");
-            System.out.println("1. Get availability and enter housing preference");
+            System.out.println("1. Get started!");
             repeat(10, " ");
-            System.out.println("2. Submit booking request");
-            repeat(10, " ");
-            System.out.println("3. Back to previous menu\n");
+            System.out.println("2. Back to previous menu\n");
 
             // repeat(36, "*");
 
-            action = promptAction(3);
+            action = promptAction(2);
 
             switch (action) {
                 case 1:
-                    checkAvailability();
-                    break;
-                case 2:
-                    fillBookingForm();
+                    getPreferences();
                     break;
                 case 3:
                     return;
@@ -151,7 +144,7 @@ public class HousingClient {
     }
 
     // TASK 1
-    public static void checkAvailability() throws SQLException {
+    public static ArrayList<int> getPreferences() throws SQLException {
         // run query
         // print results
 
@@ -168,18 +161,19 @@ public class HousingClient {
         }
 
         // can totally be changed -- just wanted to think it out
-        System.out.println("Please enter the index of your preferences: ")
-        int pref1 = readEntry("Top choice: ");
-        int pref2 = readEntry("Second choice: ");
-        int pref3 = readEntry("Third choice: ");
+        System.out.println("Please enter the index of your preferences: ");
+        int pref1 = readInt("Top choice: ", index);
+        int pref2 = readInt("Second choice: ", index);
+        int pref3 = readInt("Third choice: ", index);
 
         //construct array of preferences to be sent to backend
         ArrayList<int> preferences = new ArrayList<int>(Arrays.asList(pref1, pref2, pref3));
 
+
         //go back to previous screen
     }
 
-    public static void fillBookingForm() {
+    public static void fillBookingForm() throws SQLException {
 
         System.out.println("Please fill out the following information:\n");
 
@@ -189,7 +183,7 @@ public class HousingClient {
 
         String username = readString("Username: ");
         String password = readString("Password: ");
-        String ID = readString("Student ID: ");
+        String SID = readString("Student ID: ");
         String name = readString("Name: ");
         String gender = readString("Gender: ");
         String student_status = readString("Student status: ");
@@ -199,7 +193,11 @@ public class HousingClient {
         String department = readString("Department: ");
         String major = readString("Major: ");
         String family_headSSN = readString("Family head's SSN: ");
-        String roommate = readString("Roommate ID: ")
+        String roommate = readString("Roommate ID: ");
+
+        ArrayList<int> preferences = getPreferences();
+
+        hs.bookHousing(SID, preferences);
 
         // add information to database, assign application number?
         // have them pay fee
@@ -252,7 +250,7 @@ public class HousingClient {
         return;
     }
 
-    public static void printReportsTop() {
+    public static void printReportsTop() throws SQLException {
         int action = 0;
 
         while (action != 5) {
