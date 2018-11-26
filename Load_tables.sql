@@ -2,6 +2,7 @@ LOAD DATA LOCAL INFILE "/Users/simone/Downloads/Housing-Database/Housing_Databas
 INTO TABLE USER
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES;
 ;
 
 LOAD DATA LOCAL INFILE "/Users/simone/Downloads/Housing-Database/Housing_Database - Admin.csv" 
