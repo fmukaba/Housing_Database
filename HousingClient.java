@@ -118,8 +118,10 @@ public class HousingClient {
         // run query
         // print results
 
+        // user input -- number of bedrooms
+
         System.out.println("The following housing options are available: ");
-        ArrayList<HousingUnit> hu = hs.checkAvailability(); // returns array of strings
+        ArrayList<HousingUnit> hu = hs.checkAvailability(bedrooms); // returns array of strings
         System.out.printf("%d. %5d %5d %10s", "Index", "Building No.", "# of bedrooms", "Type");
         int index = 1;
         for (HousingUnit h : hu) {

@@ -1,13 +1,13 @@
 
 import java.sql.*;
-import java.io.*;
-import java.util.ArrayList;
+import java.lang.*;
+import java.util.*;
 
 public class HousingSystem {
 
     private Connection conn = null;
 
-    HousingSystem() throws SQLException {
+    HousingSystem() throws SQLException, ClassNotFoundException {
         // sets up connection with mySQL
         Class.forName("com.mysql.cj.jdbc.Driver");
         String url = "jdbc:mysql://localhost:3306/HOUSING?serverTimezone=UTC&useSSL=TRUE";
@@ -56,12 +56,36 @@ public class HousingSystem {
         p.execute();
     }
 
-    public void createResident(String ID,
-
-    public void bookHousing(ArrayList<HousingUnit> preferences) throws SQLException {
-
+    // Book applicant depending on availability of preferences
+    public boolean bookHousing(String SID, ArrayList<HousingUnit> preferences) throws SQLException {
+        ArrayList<HousingUnit> availableUnits = checkAvailability();
+        for (HousingUnit pref : preferences) {
+            for (HousingUnit avail : availableUnits) {
+                if (pref.equals(avail)) {
+                    createResident(SID, pref);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
+    // If Booking goes through, add Resident
+    public void createResident(String ID, HousingUnit hu) throws SQLException {
+        String query1 = "SELECT Staff_ID FROM ADMINISTRATOR WHERE Dept_name = \"Residency\" ORDER BY RAND() Limit 1";
+        PreparedStatement p1 = conn.prepareStatement(query1);
+        ResultSet r = p1.executeQuery();
+        String adminStaffID = r.getString(1);
+
+        String query2 = "INSERT INTO RESIDENT(ID_number, Admin_staff_ID, Move_in_date, Check_out_date, " +
+                "Building_number, Apartment_number, Rent_till_date)" +
+                " VALUES (?, ?, NULL, NULL, ?, ?, 0)";
+        PreparedStatement p2 = conn.prepareStatement(query2);
+        p2.setString(1, ID);
+        p2.setString(2, adminStaffID);
+        p2.setInt(3, hu.getBuilding());
+        p2.setInt(4, hu.getBedrooms());
+    }
 
 }
 

@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class HousingUnit {
     private int building;
     private int bedrooms;
@@ -32,4 +34,15 @@ public class HousingUnit {
     public void setType(String type) {
         this.type = type;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HousingUnit that = (HousingUnit) o;
+        return building == that.building &&
+                bedrooms == that.bedrooms &&
+                Objects.equals(type, that.type);
+    }
+
 }
