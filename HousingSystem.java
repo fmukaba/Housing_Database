@@ -136,6 +136,35 @@ public class HousingSystem {
         }
 
     }
+    
+    // TASK 2:
+	public static ArrayList <MaintenanceRequestDue> runReports() {
+		ArrayList<MaintenanceRequestDue> list = new ArrayList<MaintenanceRequestDue>();
+		String CurrentDate;
+		System.out.println("Active maintenance requests: ");
+		// Run the query, show results here
+		try {
+
+			String query = "SELECT USER.Name, Building_number, Apt_number, Submission_date, Date_Completed, Comments\r\n"
+					+ "FROM RESIDENT, MAINTENANCE_REQUEST, USER\r\n"
+					+ "WHERE RESIDENT.ID_NUMBER = USER.ID_NUMBER and Submission_date <= ? "; // currentDate
+			PreparedStatement p = conn.prepareStatement(query);
+			p.setString(1, CurrentDate);
+			p.clearParameters();
+			ResultSet r = p.executeQuery();
+			System.out.println("\nRESULTS: ");
+			while (r.next()) {
+				MaintenanceRequestDue row = new MaintenanceRequestDue(r.getString(1), r.getString(2), r.getString(3),
+						r.getString(4), r.getString(5), r.getString(6));
+				list.add(row);
+			}
+			return list;
+
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+
+	}
 
 }
 
