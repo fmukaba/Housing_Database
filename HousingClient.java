@@ -144,7 +144,6 @@ public class HousingClient {
         System.out.printf("%d. %5d %5d %10s %5s %5d", "Index", "Building No.", "# of bedrooms", "Type", "Allows married couples", "Price");
         int index = 1;
         for (HousingUnit h : hu) {
-            if h.type()
             System.out.printf("%d. %5d %5d %10s %5s %5d", index, h.getBuilding(), h.getBedrooms(), h.getType(), h.getMarried(), h.getPrice());
             index++;
         }
@@ -286,7 +285,7 @@ public class HousingClient {
         System.out.println("Name", "Building number", "Apt. number", "Submission date", "Date completed", "Comments");
 
         for (MaintenanceRequestDue request: m_report){
-            System.out.printf("%s, %-20d, %-5d, %-5d, %-10s, %10s, %s\n",  report.getName(), report.getBuilding(), report.getAptNum(), report.getSubDate(), report.getDateCompleted(), report.getComm())
+            System.out.printf("%s, %-20d, %-5d, %-5d, %-10s, %10s, %s\n",  report.getName(), report.getBuilding(), report.getAptNum(), report.getSubDate(), report.getDateCompleted(), report.getComm());
 
         }
         return;
