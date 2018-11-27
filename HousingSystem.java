@@ -11,6 +11,8 @@ public class HousingSystem {
         // sets up connection with mySQL
         Class.forName("com.mysql.cj.jdbc.Driver");
         String url = "jdbc:mysql://localhost:3306/HOUSING?serverTimezone=UTC&useSSL=TRUE";
+
+        // LET THEM LOG IN MANUALLY??
         this.conn = DriverManager.getConnection(url, "student", "password");
     }
 
