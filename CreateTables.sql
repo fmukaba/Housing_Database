@@ -78,7 +78,7 @@ FOREIGN KEY (ID_number) REFERENCES USER (ID_number) on delete cascade
 
 CREATE TABLE APPLICATION (
 
-Application_number      INT    	      NOT NULL     AUTO_INCREMENT,
+Application_number      INT           NOT NULL     AUTO_INCREMENT,
 Admin_staff_ID          VARCHAR(9)    NOT NULL,
 User_ID_number          VARCHAR(9)    NOT NULL,
 Fee_paid                BOOLEAN,
