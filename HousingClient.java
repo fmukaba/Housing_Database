@@ -141,10 +141,11 @@ public class HousingClient {
         ArrayList<HousingUnit> hu = hs.checkAvailability(); // returns array of strings
 
         // Prints out available housing
-        System.out.printf("%d. %5d %5d %10s %5s %5d", "Index", "Building No.", "# of bedrooms", "Type", "Allows married couples", "Price");
         int index = 1;
         for (HousingUnit h : hu) {
-            System.out.printf("%d. %5d %5d %10s %5s %5d", index, h.getBuilding(), h.getBedrooms(), h.getType(), h.getMarried(), h.getPrice());
+            //System.out.printf("%d. %5d %5d %10s %5d %5d", index, h.getBuilding(), h.getBedrooms(), h.getType(), h.getMarried(), h.getPrice());
+            System.out.println(index + h.getBuilding() + h.getBedrooms() + h.getType() + h.getMarried() + h.getPrice());
+
             index++;
         }
 
@@ -154,7 +155,7 @@ public class HousingClient {
         int pref3 = readInt("Third choice: ", index);
 
         //construct array of preferences to be sent to backend
-        ArrayList<HousingUnit> preferences = new ArrayList<HousingUnit>(Arrays.asList(hu.get(pref1 - 1), hu.get(pref2 - 1), hu.get(pref3 - 1)));
+        ArrayList<HousingUnit> preferences = new ArrayList<>(Arrays.asList(hu.get(pref1 - 1), hu.get(pref2 - 1), hu.get(pref3 - 1)));
         return preferences;
         //go back to previous screen
 
@@ -298,11 +299,11 @@ public class HousingClient {
         int value = 0;
 
         while (!valid) {
-            System.out.println("Please select an option: ");
+            System.out.println(prompt);
             if (input.hasNextInt()) {
                 value = input.nextInt();
             } else {
-                System.out.println("Please enter valid input");
+                System.out.println("Please enter valid input.");
             }
 
             if (value > 0 && value <= max) {
