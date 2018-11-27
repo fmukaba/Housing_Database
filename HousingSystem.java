@@ -18,8 +18,9 @@ public class HousingSystem {
 
     // Runs the queries based on the input
     public ArrayList<HousingUnit> checkAvailability() throws SQLException {
-        ArrayList<HousingUnit> units = new ArrayList<HousingUnit>();
-        String query = "SELECT DISTINCT Building_number, Bedroom_number, Housing_type, Married_couples_allowed" +
+        ArrayList<HousingUnit> units = new ArrayList<>();
+
+        String query = "SELECT DISTINCT Building_number, Bedroom_number, Housing_type, Married_couples_allowed," +
                 "Price_quarter, count(*) from HOUSING_UNIT where Occupation_status = 0 group by Building_number, " +
                 "Bedroom_number, Housing_type, Married_couples_allowed, Price_quarter";
         PreparedStatement p = conn.prepareStatement(query);
