@@ -90,10 +90,10 @@ FOREIGN KEY (User_ID_number) REFERENCES USER(ID_number) on delete cascade
 );
 
 CREATE TABLE HOUSING_PREFERENCE (
-Application_number      INT     NOT NULL,
+ID_number               VARCHAR(9)     NOT NULL,
 Building_preference     TINYINT,
 Housing_type_preference VARCHAR(50),
-Bedroom_preference	TINYINT,
+Bedroom_preference	    TINYINT,
 Order_of_preference     TINYINT,
 Roommate_preference     VARCHAR(150),
 
