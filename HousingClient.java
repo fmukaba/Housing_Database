@@ -48,7 +48,7 @@ public class HousingClient {
         }
     }
 
-    // Displays the top menu and allows users to pick intial high-level options
+    // Displays the top menu and allows users to pick initial high-level options
     public static void printMainMenu() throws SQLException {
 
         int action = 0;
@@ -186,7 +186,7 @@ public class HousingClient {
 
         ArrayList<HousingUnit> preferences = getPreferences();
 
-        hs.bookHousing(SID, preferences);
+        hs.bookHousing(SID, preferences, roommate);
 
         // add information to database, assign application number?
         // have them pay fee
@@ -282,10 +282,10 @@ public class HousingClient {
 
         System.out.println("Active maintenance requests: ");
 
-        System.out.println("Name", "Building number", "Apt. number", "Submission date", "Date completed", "Comments");
+        System.out.printf("%s, %-20d, %-5d, %-5d, %-10s, %10s, %s\n", "Name", "Building number", "Apt. number", "Submission date", "Date completed", "Comments");
 
         for (MaintenanceRequestDue request: m_report){
-            System.out.printf("%s, %-20d, %-5d, %-5d, %-10s, %10s, %s\n",  report.getName(), report.getBuilding(), report.getAptNum(), report.getSubDate(), report.getDateCompleted(), report.getComm());
+            System.out.printf("%s, %-20d, %-5d, %-5d, %-10s, %10s, %s\n",  request.getName(), request.getBuilding(), request.getAptNum(), request.getSubDate(), request.getDateCompleted(), request.getComm());
 
         }
         return;
