@@ -5,7 +5,7 @@ import java.util.*;
 
 public class HousingSystem {
 
-    private Connection conn = null;
+    private static Connection conn = null;
 
     HousingSystem() throws SQLException, ClassNotFoundException {
         // sets up connection with mySQL
@@ -37,7 +37,7 @@ public class HousingSystem {
     public void createApplicant(String ID, String username, String password, String name, String gender,
                                 boolean studentStatus, boolean maritalStatus, String address, String phoneNumber,
                                 String college, String department, String major, String familyHeadID)
-                                throws SQLException {
+            throws SQLException {
         String query = "INSERT INTO USER(ID_number, Username, Password, Name, Gender," +
                 "                             Student_status, Marital_Status,Address, Phone_number," +
                 "                             College, Department, Major, Family_head_ID)" +
@@ -136,35 +136,33 @@ public class HousingSystem {
         }
 
     }
-    
-    // TASK 2:
-	public static ArrayList <MaintenanceRequestDue> runReports() {
-		ArrayList<MaintenanceRequestDue> list = new ArrayList<MaintenanceRequestDue>();
-		String CurrentDate;
-		System.out.println("Active maintenance requests: ");
-		// Run the query, show results here
-		try {
 
-			String query = "SELECT USER.Name, Building_number, Apt_number, Submission_date, Date_Completed, Comments\r\n"
-					+ "FROM RESIDENT, MAINTENANCE_REQUEST, USER\r\n"
-					+ "WHERE RESIDENT.ID_NUMBER = USER.ID_NUMBER and Submission_date <= ? "; // currentDate
-			PreparedStatement p = conn.prepareStatement(query);
-			p.setString(1, CurrentDate);
-			p.clearParameters();
-			ResultSet r = p.executeQuery();
-			System.out.println("\nRESULTS: ");
-			while (r.next()) {
-				MaintenanceRequestDue row = new MaintenanceRequestDue(r.getString(1), r.getString(2), r.getString(3),
-						r.getString(4), r.getString(5), r.getString(6));
-				list.add(row);
-			}
-			return list;
+    public static ArrayList<MaintenanceRequestDue> runReports() {
+        ArrayList<MaintenanceRequestDue> list = new ArrayList<MaintenanceRequestDue>();
+        String CurrentDate = "";
+        System.out.println("Active maintenance requests: ");
 
-		} catch (SQLException e) {
-			System.out.println(e);
-		}
+        try {
 
-	}
+            String query = "SELECT USER.Name, Building_number, Apt_number, Submission_date, Date_Completed, Comments\r\n"
+                    + "FROM RESIDENT, MAINTENANCE_REQUEST, USER\r\n"
+                    + "WHERE RESIDENT.ID_NUMBER = USER.ID_NUMBER and Submission_date <= ? "; // currentDate
+            PreparedStatement p = conn.prepareStatement(query);
+            p.setString(1, CurrentDate);
+            p.clearParameters();
+            ResultSet r = p.executeQuery();
+            System.out.println("\nRESULTS: ");
+            while (r.next()) {
+                MaintenanceRequestDue row = new MaintenanceRequestDue(r.getString(1), r.getString(2), r.getString(3),
+                        r.getString(4), r.getString(5), r.getString(6));
+                list.add(row);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return list;
+    }
 
 }
 
