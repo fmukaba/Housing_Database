@@ -45,11 +45,11 @@ public class HousingClient {
         try {
             hs = new HousingSystem();
             printMainMenu();
-        } catch (SQLException e) {
+        } catch (Exception e) {
         }
     }
 
-    public static void printMainMenu() {
+    public static void printMainMenu() throws SQLException{
 
         int action = 0;
         while (action != 4) {
@@ -88,7 +88,7 @@ public class HousingClient {
         }
     }
 
-    public static void residentLogIn() throws SQLException {
+    public static void residentLogIn() {
 
         Scanner input = new Scanner(System.in);
 
@@ -99,6 +99,8 @@ public class HousingClient {
         System.out.print("password:");
 
         String password = input.nextLine();
+
+        System.out.println("Page down. Try again later.");
         /*
         try {
             connection = DriverManager.getConnection(url, username, password);
@@ -107,7 +109,7 @@ public class HousingClient {
         // Do resident log-in things -> what are they?
     }
 
-    public static void printApplicantTop() {
+    public static void printApplicantTop() throws SQLException{
         /*
         a. Users to check the availability of apartments in a particular category.
            It shows a list with all the available apartments for users to check
@@ -144,19 +146,12 @@ public class HousingClient {
     }
 
     // TASK 1
-    public static ArrayList<int> getPreferences() throws SQLException {
+    public static ArrayList<HousingUnit> getPreferences() throws SQLException {
         // run query
         // print results
 
-<<<<<<< HEAD
-        // user input -- number of bedrooms
-=======
-        Scanner input = new Scanner(System.in);
-        int bedrooms = 0;
->>>>>>> 67de3aedd594f5bb03d9dc64bb0a2f2e63eec538
-
         System.out.println("The following housing options are available: ");
-        ArrayList<HousingUnit> hu = hs.checkAvailability(bedrooms); // returns array of strings
+        ArrayList<HousingUnit> hu = hs.checkAvailability(); // returns array of Housing Units
         System.out.printf("%d. %5d %5d %10s", "Index", "Building No.", "# of bedrooms", "Type");
         int index = 1;
         for (HousingUnit h : hu) {
@@ -170,11 +165,13 @@ public class HousingClient {
         int pref2 = readInt("Second choice: ", index);
         int pref3 = readInt("Third choice: ", index);
 
-        //construct array of preferences to be sent to backend
-        ArrayList<int> preferences = new ArrayList<int>(Arrays.asList(pref1, pref2, pref3));
+        //construct array list of housing unit preferences
+        ArrayList<HousingUnit> preferences = new ArrayList<HousingUnit>();
+        preferences.add(hu.get(pref1-1));
+        preferences.add(hu.get(pref2-1));
+        preferences.add(hu.get(pref3-1));
 
-
-        //go back to previous screen
+        return preferences;
     }
 
     public static void fillBookingForm() throws SQLException {
@@ -199,16 +196,16 @@ public class HousingClient {
         String family_headSSN = readString("Family head's SSN: ");
         String roommate = readString("Roommate ID: ");
 
-        ArrayList<int> preferences = getPreferences();
+        ArrayList<HousingUnit> preferences = getPreferences();
 
-        hs.bookHousing(SID, preferences);
+        hs.bookHousing(SID, preferences, roommate);
 
         // add information to database, assign application number?
         // have them pay fee
         printApplicantTop(); // go back to applicant page
     }
 
-    public static void printAdminTop() {
+    public static void printAdminTop() throws SQLException{
 
         int action = 0;
         while (action != 6) {
@@ -348,7 +345,7 @@ public class HousingClient {
 
         while (!valid) {
             if (input.hasNext()) {
-                value = input.nextLine();
+                output = input.nextLine();
                 valid = true;
             } else {
                 System.out.println("Please enter valid input");
