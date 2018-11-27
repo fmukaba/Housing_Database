@@ -1,21 +1,9 @@
-// APPLICANT:
-// Combine check availability and Book/application
-// Print out a numbered list of query results for available rooming options
-// Take in user input first, second, third availability
-// Take in rest of application
-
-// USER TABLE:
-// Add people who
-
 // USERS:
 // Make all residents ->
 
 // Catch exceptions in the client
 
 // QUERIES:
-// Take Array of Housing info, format & display
-// Take user input, translate to ArrayList of preference Housing Units
-// Add married couples boolean
 // Does applicant info match one of their preferences? If so, make it so that they are a resident there
 
 // Need to match preference with what's available ->
@@ -28,10 +16,6 @@
 // After: type in user information -> add that user to user table
 // PRINT IT TO THE CONSOLE WITH THE INDEX FROM AN ARRAYLIST
 // Then match them
-
-// All try-catch in client
-
-// Refactor repeat() to centerText()
 
 import java.sql.*;
 import java.util.*;
@@ -125,12 +109,14 @@ public class HousingClient {
             switch (action) {
                 case 1:
                     getPreferences();
+                    fillBookingForm();
                     break;
                 case 2:
                     return;
 
             }
         }
+        return;
     }
 
     // TASK 1:
@@ -155,19 +141,21 @@ public class HousingClient {
         int pref3 = readInt("Third choice: ", index);
 
         //construct array of preferences to be sent to backend
+<<<<<<< HEAD
         ArrayList<HousingUnit> preferences = new ArrayList<>(Arrays.asList(hu.get(pref1 - 1), hu.get(pref2 - 1), hu.get(pref3 - 1)));
+=======
+        ArrayList<HousingUnit> preferences = new ArrayList<HousingUnit>(Arrays.asList(hu.get(pref1 - 1), hu.get(pref2 - 1), hu.get(pref3 - 1)));
+
+>>>>>>> d23f477d9f87882cddcc02d6c5563b7c779d0205
         return preferences;
         //go back to previous screen
 
     }
 
-
     // Accepts user's application information, then sends it to the backend to go to the database
     public static void fillBookingForm() throws SQLException {
 
         System.out.println("Please fill out the following information:\n");
-
-        Scanner input = new Scanner(System.in);
 
         System.out.println("User information");
 
@@ -175,23 +163,36 @@ public class HousingClient {
         String password = readString("Password: ");
         String SID = readString("Student ID: ");
         String name = readString("Name: ");
+        String phoneNumber = readString("Phone number: ");
         String gender = readString("Gender: ");
-        String student_status = readString("Student status: ");
-        String marital_status = readString("Marital status: ");
+        int student_status_int = readInt("Student status (1 if student, 0 if not): ", 1);
+        int marital_status_int = readInt("Marital status (1 if married, 0 if single): ", 1);
         String address = readString("Address: ");
         String college = readString("College: ");
         String department = readString("Department: ");
         String major = readString("Major: ");
-        String family_headSSN = readString("Family head's SSN: ");
+        String familyHeadID = readString("Family head's SSN: ");
         String roommate = readString("Roommate ID: ");
+
+        // Translate the input values into boolean values
+        boolean marital_status = false;
+        if (marital_status_int == 1){
+            marital_status = true;
+        }
+
+        boolean student_status = true;
+        if (student_status_int == 0){
+            student_status = false;
+        }
 
         ArrayList<HousingUnit> preferences = getPreferences();
 
         hs.bookHousing(SID, preferences, roommate);
 
-        // add information to database, assign application number?
-        // have them pay fee
-        // printApplicantTop(); // Is this needed?
+        hs.createApplicant(SID, username, password, name, gender, student_status, marital_status, address,
+                phoneNumber, college, department, major, familyHeadID); // When do we add application number?
+
+        // have them pay fee?
         return;
     }
 
@@ -256,7 +257,7 @@ public class HousingClient {
 
             System.out.println("Please select an option: ");
 
-            while (!valid) {
+            while (!valid && input.hasNextInt()) {
                 action = input.nextInt();
 
                 if (action == 4 || action == 5) {
@@ -283,12 +284,14 @@ public class HousingClient {
 
         System.out.println("Active maintenance requests: ");
 
-        System.out.printf("%s, %-20d, %-5d, %-5d, %-10s, %10s, %s\n", "Name", "Building number", "Apt. number", "Submission date", "Date completed", "Comments");
+        System.out.printf("%s %20s %5s %5s %10s %10s %s", "Name", "Building number", "Apt. number", "Submission date", "Date completed", "Comments", "\n");
 
         for (MaintenanceRequestDue request: m_report){
-            System.out.printf("%s, %-20d, %-5d, %-5d, %-10s, %10s, %s\n",  request.getName(), request.getBuilding(), request.getAptNum(), request.getSubDate(), request.getDateCompleted(), request.getComm());
+            System.out.printf("%s %20s %5s %5s %10s %10s %s",  request.getName(), request.getBuilding(), request.getAptNum(), request.getSubDate(), request.getDateCompleted(), request.getComm(), "\n");
 
         }
+
+        System.out.println();
         return;
     }
 
