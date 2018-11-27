@@ -33,40 +33,35 @@
 
 // Refactor repeat() to centerText()
 
-import java.io.IOException;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.*;
 
 public class HousingClient {
 
     private static HousingSystem hs = null;
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws ClassNotFoundException {
         try {
             hs = new HousingSystem();
             printMainMenu();
-        } catch (Exception e) {
+        } catch (SQLException e) {
         }
     }
 
-    public static void printMainMenu() throws SQLException{
+    // Displays the top menu and allows users to pick intial high-level options
+    public static void printMainMenu() throws SQLException {
 
         int action = 0;
         while (action != 4) {
 
-            repeat(36, "*");
+            repeat(42, "*");
+            formatString("Welcome to the Housing System", 7, " ");
+            formatString("1. Resident Login", 4, " ");
+            formatString("2. Applicant Registration/Apply", 4, " ");
+            formatString("3. Admin", 4, " ");
+            formatString("4. Quit\n", 4, " ");
 
-            System.out.println("Welcome to the Housing System");
-            repeat(10, " ");
-            System.out.println("1. Resident Login");
-            repeat(10, " ");
-            System.out.println("2. Applicant Registration/Apply");
-            repeat(10, " ");
-            System.out.println("3. Admin");
-            repeat(10, " ");
-            System.out.println("4. Quit\n");
-
-            action = promptAction(4);
+            action = readInt("Please select an option: ", 4); // FIX THIS
 
             switch (action) {
                 case 1:
@@ -101,15 +96,11 @@ public class HousingClient {
         String password = input.nextLine();
 
         System.out.println("Page down. Try again later.");
-        /*
-        try {
-            connection = DriverManager.getConnection(url, username, password);
-        } catch (SQLException sqlE) {}
-        */
-        // Do resident log-in things -> what are they?
+        return;
     }
 
-    public static void printApplicantTop() throws SQLException{
+    // Displays the applicant options and accepts an action
+    public static void printApplicantTop() throws SQLException {
         /*
         a. Users to check the availability of apartments in a particular category.
            It shows a list with all the available apartments for users to check
@@ -122,58 +113,56 @@ public class HousingClient {
         int action = 0;
         while (action != 3) {
 
-            repeat(36, "*");
+            repeat(42, "*");
+            formatString("Welcome Applicant!", 12, " ");
+            formatString("1. Get started!", 4, " ");
+            formatString("2. Back to previous menu\n", 4, " ");
 
-            System.out.println("Welcome Applicant!");
-            repeat(10, " ");
-            System.out.println("1. Get started!");
-            repeat(10, " ");
-            System.out.println("2. Back to previous menu\n");
+            repeat(42, "*");
 
-            // repeat(36, "*");
-
-            action = promptAction(2);
+            action = readInt("Please select an option: ", 2);
 
             switch (action) {
                 case 1:
                     getPreferences();
                     break;
-                case 3:
+                case 2:
                     return;
 
             }
         }
     }
 
-    // TASK 1
+    // TASK 1:
+    // Displays available housing options and accepts the user housing preferences
     public static ArrayList<HousingUnit> getPreferences() throws SQLException {
-        // run query
-        // print results
 
         System.out.println("The following housing options are available: ");
-        ArrayList<HousingUnit> hu = hs.checkAvailability(); // returns array of Housing Units
-        System.out.printf("%d. %5d %5d %10s", "Index", "Building No.", "# of bedrooms", "Type");
+        ArrayList<HousingUnit> hu = hs.checkAvailability(); // returns array of strings
+
+        // Prints out available housing
+        System.out.printf("%d. %5d %5d %10s %5s %5d", "Index", "Building No.", "# of bedrooms", "Type", "Allows married couples", "Price");
         int index = 1;
         for (HousingUnit h : hu) {
-            System.out.println(String.format("%d. %15d %15d %15s", index, h.getBuilding(), h.getBedrooms(), h.getType()));
+            if h.type()
+            System.out.printf("%d. %5d %5d %10s %5s %5d", index, h.getBuilding(), h.getBedrooms(), h.getType(), h.getMarried(), h.getPrice());
             index++;
         }
 
-        // can totally be changed -- just wanted to think it out
         System.out.println("Please enter the index of your preferences: ");
         int pref1 = readInt("Top choice: ", index);
         int pref2 = readInt("Second choice: ", index);
         int pref3 = readInt("Third choice: ", index);
 
-        //construct array list of housing unit preferences
-        ArrayList<HousingUnit> preferences = new ArrayList<HousingUnit>();
-        preferences.add(hu.get(pref1-1));
-        preferences.add(hu.get(pref2-1));
-        preferences.add(hu.get(pref3-1));
-
+        //construct array of preferences to be sent to backend
+        ArrayList<HousingUnit> preferences = new ArrayList<HousingUnit>(Arrays.asList(hu.get(pref1 - 1), hu.get(pref2 - 1), hu.get(pref3 - 1)));
         return preferences;
+        //go back to previous screen
+
     }
 
+
+    // Accepts user's application information, then sends it to the backend to go to the database
     public static void fillBookingForm() throws SQLException {
 
         System.out.println("Please fill out the following information:\n");
@@ -198,37 +187,35 @@ public class HousingClient {
 
         ArrayList<HousingUnit> preferences = getPreferences();
 
-        hs.bookHousing(SID, preferences, roommate);
+        hs.bookHousing(SID, preferences);
 
         // add information to database, assign application number?
         // have them pay fee
-        printApplicantTop(); // go back to applicant page
+        // printApplicantTop(); // Is this needed?
+        return;
     }
 
-    public static void printAdminTop() throws SQLException{
+    // Displays all admin options and accepts further action options
+    public static void printAdminTop() throws SQLException {
 
         int action = 0;
         while (action != 6) {
-            repeat(36, "*");
 
+            repeat(42, "*");
             System.out.println("Welcome to Bellevue College Housing System");
-            System.out.println("Administrators Staff");
-
-            repeat(10, " ");
-            System.out.println("1. Manage Residents");
-            repeat(10, " ");
-            System.out.println("2. Manage Applicants");
-            repeat(10, " ");
-            System.out.println("3. Demographic Studies");
-            repeat(10, " ");
-            System.out.println("4. Manage Maintenance orders");
-            repeat(10, " ");
-            System.out.println("5. Administrative Reports");
-            repeat(10, " ");
-            System.out.println("6. Back to previous menu\n");
+            formatString("Administrators Staff", 10, " ");
+            formatString("1. Manage Residents", 4, " ");
+            formatString("1. Manage Applicants", 4, " ");
+            formatString("3. Demographic Studies", 4, " ");
+            formatString("4. Manage Maintenance orders", 4, " ");
+            formatString("5. Administrative Reports", 4, " ");
+            formatString("6. Back to previous menu\n", 4, " ");
+            repeat(42, "*");
 
             Scanner input = new Scanner(System.in);
             boolean valid = false;
+
+            System.out.println("Please select an option: ");
 
             while (!valid) {
                 action = input.nextInt();
@@ -251,25 +238,23 @@ public class HousingClient {
         return;
     }
 
+    // Displays the reports menu and accepts user action choice
     public static void printReportsTop() throws SQLException {
         int action = 0;
 
         while (action != 5) {
-            repeat(36, "*");
-            System.out.println("Administrative Reports");
-            repeat(10, " ");
-            System.out.println("1. Housing department reports");
-            repeat(10, " ");
-            System.out.println("2. Applicants Reports");
-            repeat(10, " ");
-            System.out.println("3. Resident Reports");
-            repeat(10, " ");
-            System.out.println("4. Maintenance department reports");
-            repeat(10, " ");
-            System.out.println("5. Quit");
+            repeat(42, "*");
+            formatString("Administrative Reports", 10, " ");
+            formatString("1. Housing department reports", 4, " ");
+            formatString("2. Applicants Reports", 4, " ");
+            formatString("3. Resident Reports", 4, " ");
+            formatString("4. Maintenance department reports", 4, " ");
+            formatString("5. Quit", 4, " ");
 
             Scanner input = new Scanner(System.in);
             boolean valid = false;
+
+            System.out.println("Please select an option: ");
 
             while (!valid) {
                 action = input.nextInt();
@@ -280,44 +265,34 @@ public class HousingClient {
                 System.out.println("Please enter a valid action: ");
             }
 
+            ArrayList<MaintenanceRequestDue> m_report =  hs.runReports();
+
             switch (action) {
-                // case 4:
-                // runReports(); TASK TWO
+                case 4:
+                    showReports(m_report);
                 case 5:
-                    return; //printAdminTop();
+                    return; //printAdminTop(); -> needed?
             }
         }
         return;
-
     }
 
     // TASK 2:
-    public static void runReports() {
+    // Prints the current maintenance results
+    public static void showReports(ArrayList<MaintenanceRequestDue> m_report) {
+
         System.out.println("Active maintenance requests: ");
-        // Run the query, show results here
-    }
 
-    public static int promptAction(int max) {
-        boolean valid = false;
-        Scanner input = new Scanner(System.in);
-        int value = 0;
+        System.out.println("Name", "Building number", "Apt. number", "Submission date", "Date completed", "Comments");
 
-        repeat(36, "*");
+        for (MaintenanceRequestDue request: m_report){
+            System.out.printf("%s, %-20d, %-5d, %-5d, %-10s, %10s, %s\n",  report.getName(), report.getBuilding(), report.getAptNum(), report.getSubDate(), report.getDateCompleted(), report.getComm())
 
-        while (!valid) {
-            System.out.println("Please select an option: ");
-            if (input.hasNextInt()) {
-                value = input.nextInt();
-            }
-
-            if (value > 0 && value <= max) {
-                System.out.println(value);
-                valid = true;
-            }
         }
-        return value;
+        return;
     }
 
+    // Manages user input for integer-specific values
     public static int readInt(String prompt, int max) {
         boolean valid = false;
         Scanner input = new Scanner(System.in);
@@ -327,15 +302,20 @@ public class HousingClient {
             System.out.println("Please select an option: ");
             if (input.hasNextInt()) {
                 value = input.nextInt();
+            } else {
+                System.out.println("Please enter valid input");
             }
 
             if (value > 0 && value <= max) {
                 valid = true;
+            } else {
+
             }
         }
         return value;
     }
 
+    // Manages user input for string-specific input
     public static String readString(String prompt) {
         boolean valid = false;
         Scanner input = new Scanner(System.in);
@@ -355,56 +335,21 @@ public class HousingClient {
         return output;
     }
 
-    public static void repeat(int num, String str) {
-
+    // Repeats a given character to a given amount
+    public static void repeat(int num, String str){
         for (int i = 0; i <= num; i++) {
             System.out.print(str);
         }
 
-        System.out.println();
+        System.out.println("\n");
     }
 
-    public static int getAction(int max) {
-
-        Scanner input = new Scanner(System.in);
-        boolean valid = false;
-        int action = 0;
-
-        while (!valid) {
-            action = input.nextInt();
-
-            if (action > 0 && action <= max) {
-                valid = true;
-            }
-            System.out.println("Please enter a valid action from 1 to " + max);
+    // Formats a string, adding a certain amount of buffer to center or indent
+    static void formatString(String text, int num, String str){
+        for (int i = 0; i < num; i++) {
+            System.out.print(str);
         }
 
-        return action;
-    }
-
-    /*
-        // Prompts the user and returns the given input
-        static String readEntry(String prompt) {
-            try {
-                StringBuffer buffer = new StringBuffer();
-                System.out.print(prompt);
-                System.out.flush();
-                int c = System.in.read();
-                while(c != '\n' && c != -1) {
-                    buffer.append((char)c);
-                    c = System.in.read();
-                }
-                return buffer.toString().trim();
-            } catch (IOException e) {
-                return "";
-            }
-        }
-    */
-    static void centerText(String text, int width) {
-        int cushion = (width - text.length())/2;
-        for (int i = 0; i < cushion; i++) {
-            System.out.print(" ");
-        }
         System.out.println(text);
     }
 }
