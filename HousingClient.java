@@ -122,16 +122,16 @@ public class HousingClient {
         int pref1 = readInt("Top choice: ", index - 1);
         int pref2 = readInt("Second choice: ", index - 1);
 
-        while (pref1 == pref2){
-            System.out.println("Please enter a different value");
-            pref2 = readInt("Second choice: ", index - 1);
-        }
+    //    while (pref1 == pref2){
+    //        System.out.println("Please enter a different value");
+    //        pref2 = readInt("Second choice: ", index - 1);
+    //    }
 
         int pref3 = readInt("Third choice: ", index - 1);
-        while (pref1 == pref3 || pref2 == pref3){
-            System.out.println("Please enter a different value");
-            pref3 = readInt("Third choice: ", index - 1);
-        }
+     //   while (pref1 == pref3 || pref2 == pref3){
+     //       System.out.println("Please enter a different value");
+     //       pref3 = readInt("Third choice: ", index - 1);
+     //   }
 
         //construct array of preferences to be sent to backend
         ArrayList<HousingUnit> preferences = new ArrayList<>(Arrays.asList(hu.get(pref1 - 1), hu.get(pref2 - 1), hu.get(pref3 - 1)));
@@ -159,7 +159,8 @@ public class HousingClient {
         String college = readString("College: ");
         String department = readString("Department: ");
         String major = readString("Major: ");
-        String familyHeadSSN = readString("Family head's SSN (enter your own if it's you: ");
+        String familyHeadSSN = readString("Family head's SID (enter your own if it's you)" +
+                "\nNote, family head must already be a resident or we cannot process your application: ");
 
         while (!(familyHeadSSN.length() == 9 && isInteger(familyHeadSSN))){ // validates SSN
             System.out.println("Please enter a valid ID");
@@ -184,7 +185,7 @@ public class HousingClient {
                     phoneNumber, college, department, major, familyHeadSSN);
 
         } catch (SQLException e) {
-            System.out.println("A database error occurred: " + e.getMessage());
+            System.out.println("A database error occurred. Make sure all information is inputted correctly.");
             System.out.println("Would you like to restart your application?");
             int reset = readInt("1 for yes, 2 for no: ", 2);
             if (reset == 1){
@@ -197,17 +198,19 @@ public class HousingClient {
         String newAddress = hs.checkHousing(SID, preferences, roommate);
 
         if (!newAddress.equals(null)) {
-            System.out.println("Congratulations! \nYou are now a Bellevue College resident. \nYour address is: " + newAddress);
-            System.out.println("Next time you enter the portal you can log in to the resident portal.");
+            System.out.println(" \nWe have an available unit. Address is " + newAddress);
             System.out.println();
             int acceptHousing = readInt("Please press 1 to confirm, 2 to reject", 2);
-            hs.bookHousing(SID, acceptHousing);
 
             if (acceptHousing == 2) {
-                System.out.println("You've been added to the wait list. \nPlease check again later.");
+                System.out.println("You've been added to the wait list. \nWe will send you an email if accepted.");
+            } else {
+                hs.bookHousing(SID, acceptHousing); // Add resident to the database
+                System.out.println("Congratulations! You are now a Bellevue College resident. ");
+                System.out.println("Next time you enter the portal you can log in as a resident.");
             }
 
-        } else {
+        } else { // Iv no units available, add to wait list
             System.out.println("You've been added to the wait list. \nPlease check again later.");
         }
 
