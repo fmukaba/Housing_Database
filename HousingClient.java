@@ -85,15 +85,6 @@ public class HousingClient {
 
     // Displays the applicant options and accepts an action
     public static void printApplicantTop() throws SQLException {
-        /*
-        a. Users to check the availability of apartments in a particular category.
-           It shows a list with all the available apartments for users to check
-           availability of apartments in a particular category.
-        b. Submit Booking request- fill up application and choose one of the available
-           housing categories
-        c. Receive confirmation message
-        d. After receiving confirmation can login to Residents login option in the main menu
-        */
         int action = 0;
         while (action != 3) {
 
@@ -127,18 +118,18 @@ public class HousingClient {
 
         // Prints out available housing
         //2
-        // System.out.printf("%s %20s %5s %5s %10s %10s %s", "Name", "Building number", "Apt. number", "Submission date", "Date completed", "Comments", "\n");
+        System.out.printf("%-8s %-15s %-18s %-10s %-27s %s\n", "Index", "Building #", "# Bedrooms", "Type", "Allows married couples", "Price ($)");
         int index = 1;
         for (HousingUnit h : hu) {
-            // System.out.printf("%s %20s %5s %5s %10s %10s %s",  request.getName(), request.getBuilding(), request.getAptNum(), request.getSubDate(), request.getDateCompleted(), request.getComm(), "\n");
-            System.out.println(index + h.getBuilding() + h.getBedrooms() + h.getType() + h.getMarried() + h.getPrice());
+            System.out.printf("%-8d %-15s %-18s %-10s %-27s %s %s", index, h.getBuilding(), h.getBedrooms(), h.getType(), h.getMarried(), h.getPrice(), "\n");
+            // System.out.println(index + h.getBuilding() + h.getBedrooms() + h.getType() + h.getMarried() + h.getPrice());
             index++;
         }
 
         System.out.println("Please enter the index of your preferences: ");
-        int pref1 = readInt("Top choice: ", index);
-        int pref2 = readInt("Second choice: ", index);
-        int pref3 = readInt("Third choice: ", index);
+        int pref1 = readInt("Top choice: ", index - 1);
+        int pref2 = readInt("Second choice: ", index - 1);
+        int pref3 = readInt("Third choice: ", index - 1);
 
         //construct array of preferences to be sent to backend
         ArrayList<HousingUnit> preferences = new ArrayList<>(Arrays.asList(hu.get(pref1 - 1), hu.get(pref2 - 1), hu.get(pref3 - 1)));
@@ -153,8 +144,8 @@ public class HousingClient {
         String name = readString("Name: ");
         String phoneNumber = readString("Phone number: ");
         String gender = readString("Gender: ");
-        int student_status_int = readInt("Student status (1 if student, 0 if not): ", 1);
-        int marital_status_int = readInt("Marital status (1 if married, 0 if single): ", 1);
+        int student_status_int = readInt("Student status (1 if student, 2 if not): ", 2);
+        int marital_status_int = readInt("Marital status (1 if married, 2 if single): ", 2);
         String address = readString("Address: ");
         String college = readString("College: ");
         String department = readString("Department: ");
@@ -164,22 +155,31 @@ public class HousingClient {
 
         // Translate the input values into boolean values
         boolean marital_status = false;
-        if (marital_status_int == 1){
+        if (marital_status_int == 1) {
             marital_status = true;
         }
 
         boolean student_status = true;
-        if (student_status_int == 0){
+        if (student_status_int == 0) {
             student_status = false;
         }
 
-        hs.createApplicant(SID, username, password, name, gender, student_status, marital_status, address,
-                phoneNumber, college, department, major, familyHeadID); // When do we add application number?
+        hs.createUser(SID, username, password, name, gender, student_status, marital_status, address,
+                phoneNumber, college, department, major, familyHeadID);
 
-        hs.bookHousing(SID, preferences, roommate);
+        boolean success = hs.bookHousing(SID, preferences, roommate);
 
-        // have them pay fee?
-        return;
+        if (success) {
+            System.out.println("Congratulations! \nYou are now a Bellevue College resident.");
+            System.out.println("Next time you enter the portal you can log in to the resident portal");
+
+        } else {
+            System.out.println("We're sorry, there is no space at this time.");
+            System.out.println("You've been added to the waitlist. \nPlease check again later");
+            // hs.addToWaitlist(SID, preferences, roommate);
+
+            return;
+        }
     }
 
     // Displays all admin options and accepts further action options
@@ -297,6 +297,9 @@ public class HousingClient {
 
             if (value > 0 && value <= max) {
                 valid = true;
+
+            } else {
+                System.out.println("Please enter valid input");
             }
         }
         return value;
