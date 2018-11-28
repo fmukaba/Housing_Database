@@ -1,3 +1,9 @@
+// CS 331 Project Assignment Part B
+// Jena Lovejoy, Franck Mukaba, Simone Ray
+// Due Wednesday, November 28 2018
+// HousingClient provides the user-facing interface,
+// allowing for addition to or retrieval from the Housing database
+
 import java.sql.*;
 import java.util.*;
 
@@ -25,8 +31,9 @@ public class HousingClient {
             formatString("2. Applicant Registration/Apply", 4, " ");
             formatString("3. Admin", 4, " ");
             formatString("4. Quit\n", 4, " ");
+            repeat(42, "*");
 
-            action = readInt("Please select an option: ", 4); // FIX THIS
+            action = readInt("Please select an option: ", 4);
 
             switch (action) {
                 case 1:
@@ -42,6 +49,8 @@ public class HousingClient {
                     break;
 
                 case 4:
+                    System.out.println("\nQuitting.\n");
+                    repeat(42, "*");
                     return;
 
             }
@@ -60,7 +69,7 @@ public class HousingClient {
 
         String password = input.nextLine();
 
-        System.out.println("Page down. Try again later.");
+        System.out.println("Page down. Try again later.\n");
         return;
     }
 
@@ -68,7 +77,7 @@ public class HousingClient {
     public static void printApplicantTop() throws SQLException {
         int action = 0;
         while (action != 3) {
-
+            System.out.println();
             repeat(42, "*");
             formatString("Welcome Applicant!", 12, " ");
             formatString("1. Get started!", 4, " ");
@@ -77,6 +86,7 @@ public class HousingClient {
             repeat(42, "*");
 
             action = readInt("Please select an option: ", 2);
+
 
             switch (action) {
                 case 1:
@@ -93,6 +103,8 @@ public class HousingClient {
     // TASK 1:
     // Displays available housing options and accepts the user housing preferences
     public static void getPreferences() throws SQLException {
+
+        repeat(42, "*");
 
         System.out.println("The following housing options are available: ");
         ArrayList<HousingUnit> hu = hs.checkAvailability(); // returns array of strings
@@ -184,6 +196,7 @@ public class HousingClient {
 
             System.out.println("Please select an option: ");
 
+
             while (!valid) {
                 action = input.nextInt();
 
@@ -216,7 +229,9 @@ public class HousingClient {
             formatString("2. Applicants Reports", 4, " ");
             formatString("3. Resident Reports", 4, " ");
             formatString("4. Maintenance department reports", 4, " ");
-            formatString("5. Quit", 4, " ");
+            formatString("5. Quit\n", 4, " ");
+
+            repeat(42, "*");
 
             Scanner input = new Scanner(System.in);
             boolean valid = false;
@@ -249,7 +264,8 @@ public class HousingClient {
     // Prints the current maintenance results
     public static void showReports(ArrayList<MaintenanceRequestDue> m_report) {
 
-        System.out.println("Active maintenance requests: \n");
+        repeat(42, "*");
+        System.out.println("\nActive maintenance requests: \n");
         System.out.println("Please note: A date of 0000-00-00 indicates work that has not been completed yet.\n");
 
         System.out.printf("%-20s %-15s %-16s %-20s %-20s %-20s\n", "Tenant", "Building #", "Apartment #", "Submission date", "Date completed", "Comments");
@@ -270,15 +286,15 @@ public class HousingClient {
 
         while (!valid) {
             System.out.println(prompt);
-            if (input.hasNextInt()) {
-                value = input.nextInt();
-            } else {
-                System.out.println("Please enter valid input");
-            }
-
-            if (value > 0 && value <= max) {
-                valid = true;
-
+            if (input.hasNext()) {
+                if (input.hasNextInt()) {
+                    value = input.nextInt();
+                    if (value > 0 && value <= max) {
+                        valid = true;
+                    } else {
+                        System.out.println("Please enter valid input");
+                    }
+                }
             } else {
                 System.out.println("Please enter valid input");
             }
