@@ -73,7 +73,8 @@ ID_number		CHAR(9)         NOT NULL,
 Acceptance_status      		    BOOLEAN,
 
 PRIMARY KEY (ID_number),
-FOREIGN KEY (ID_number) REFERENCES USER (ID_number) on delete cascade
+FOREIGN KEY (ID_number) REFERENCES USER (ID_number) on delete cascade,
+FOREIGN KEY (Staff_ID) REFERENCES ADMINISTRATOR (Staff_ID) on delete cascade
 );
 
 CREATE TABLE HOUSING_PREFERENCE (
