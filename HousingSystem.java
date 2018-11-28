@@ -1,3 +1,7 @@
+// CS 331 Project Assignment Part B
+// Jena Lovejoy, Franck Mukaba, Simone Ray
+// Due Wednesday, November 28 2018
+// Housing System provides all of the SQL queries and database edits a HousingClient user may need
 
 import java.sql.*;
 import java.lang.*;
@@ -12,13 +16,13 @@ public class HousingSystem {
         Class.forName("com.mysql.cj.jdbc.Driver");
         String url = "jdbc:mysql://localhost:3306/HOUSING?serverTimezone=UTC&useSSL=TRUE";
 
-        // LET THEM LOG IN MANUALLY??
         this.conn = DriverManager.getConnection(url, "student", "password");
     }
 
-    // Runs the queries based on the input
+    // Checks which housing units are available to students, and returns an ArrayList to be displayed
+    // to prospective applicants
     public ArrayList<HousingUnit> checkAvailability() throws SQLException {
-        ArrayList<HousingUnit> units = new ArrayList<HousingUnit>();
+        ArrayList<HousingUnit> units = new ArrayList<>();
         String query = "SELECT DISTINCT Building_number, Bedroom_number, Housing_type, Married_couples_allowed," +
                 "Price_quarter, count(*) from HOUSING_UNIT where Occupation_status = 0 group by Building_number, " +
                 "Bedroom_number, Housing_type, Married_couples_allowed, Price_quarter";
@@ -43,6 +47,7 @@ public class HousingSystem {
         return units;
     }
 
+    // Given applicant information, creates a new user to be added to the housing database
     public void createUser(String ID, String username, String password, String name, String gender,
                            boolean studentStatus, boolean maritalStatus, String address, String phoneNumber,
                            String college, String department, String major, String familyHeadID)
@@ -68,7 +73,7 @@ public class HousingSystem {
         p.execute();
     }
 
-    // Book applicant depending on availability of preferences
+    // Assigns an applicant a room depending on availability of inputted preferences
     public boolean bookHousing(String SID, ArrayList<HousingUnit> preferences, String roommate) throws SQLException {
         int bNo = 0;
         int aptNo = 0;
@@ -106,12 +111,12 @@ public class HousingSystem {
             }
         }
 
-        //Booking did not go through
+        // If booking could not be completed (a room not available at this time), applicant added to database
         createApplicant(SID, preferences, roommate);
         return false;
     }
 
-    // If Booking goes through, add Resident
+    // If room booking goes through, create a resident and add them to the database
     public void createResident(String ID, int aptNo, int bNo) throws SQLException {
         String query1 = "SELECT Staff_ID FROM ADMINISTRATOR WHERE Dept_name = \"Residency\" ORDER BY RAND() Limit 1";
         PreparedStatement p1 = conn.prepareStatement(query1);
@@ -151,7 +156,7 @@ public class HousingSystem {
 
     }
 
-    // Add applicant who did not get into the system (wait list)
+    // Add applicant who did not get into the system (waitlist)
     public static void createApplicant(String ID, ArrayList<HousingUnit> preferences, String roommate) throws SQLException {
 
         String query = "INSERT INTO APPLICANT(ID_number, Acceptance_status) VALUES (?, 0)";
@@ -176,14 +181,15 @@ public class HousingSystem {
         }
     }
 
+    // Returns an ArrayList of all maintenance requests before a certain date
     public static ArrayList<MaintenanceRequestDue> runReports() {
-        ArrayList<MaintenanceRequestDue> list = new ArrayList<MaintenanceRequestDue>();
+        ArrayList<MaintenanceRequestDue> list = new ArrayList<>();
         // String CurrentDate = "2018-11-18";
 
         try {
             String query = "SELECT USER.Name, Building_number, Apt_number, Submission_date, Date_Completed, Comments "
                     + "FROM RESIDENT, MAINTENANCE_REQUEST, USER "
-                    + "WHERE RESIDENT.ID_NUMBER = USER.ID_NUMBER and Date_Completed <= \"2018-11-18\" and Date_Completed <> \"0000-00-00\" " // currentDate
+                    + "WHERE RESIDENT.ID_NUMBER = USER.ID_NUMBER and Date_Completed <= \"2018-11-18\" " // currentDate
                     + "ORDER BY Submission_date DESC" ;
             PreparedStatement p = conn.prepareStatement(query);
             // p.setString(1, CurrentDate);
