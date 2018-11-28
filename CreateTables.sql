@@ -67,7 +67,7 @@ primary key (ID_number),
 FOREIGN KEY (Building_number,Apt_number) REFERENCES HOUSING_UNIT(Building_number,Apt_number) on delete cascade
 );
 
-CREATE TABLE APPLICANT (
+CREATE TABLE WAITLISTED_APPLICANT (
 
 ID_number		CHAR(9)         NOT NULL,
 Staff_ID 		CHAR(9),
@@ -85,7 +85,7 @@ Bedroom_preference	        TINYINT,
 Order_of_preference         TINYINT,
 Roommate_preference         VARCHAR(150),
 
-FOREIGN KEY (ID_number) REFERENCES APPLICANT(ID_number) on delete cascade
+FOREIGN KEY (ID_number) REFERENCES WAITLISTED_APPLICANT(ID_number) on delete cascade
 );
 
 CREATE TABLE MAINTENANCE_REQUEST (
