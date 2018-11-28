@@ -128,7 +128,7 @@ public class HousingSystem {
     // If room booking goes through, create a resident and add them to the database
     public void createResident(String ID, int aptNo, int bNo) throws SQLException {
         String adminStaffID = "NULL";
-        String query1 = "SELECT Staff_ID FROM ADMINISTRATOR WHERE ResidentAdmin_flag == 1 ORDER BY RAND() Limit 1";
+        String query1 = "SELECT Staff_ID FROM ADMINISTRATOR WHERE ResidentAdmin_flag = 1 ORDER BY RAND() Limit 1";
         PreparedStatement p1 = conn.prepareStatement(query1);
         ResultSet r = p1.executeQuery();
         if (r.next()) {
@@ -177,7 +177,7 @@ public class HousingSystem {
     // Add applicant who did not get into the system (wait list)
     public void createApplicant(String ID, ArrayList<HousingUnit> preferences, String roommate) throws SQLException {
         String resStaffID = "NULL";
-        String query1 = "SELECT Staff_ID FROM ADMINISTRATOR WHERE AdmissionsAdmin_flag == 1 ORDER BY RAND() Limit 1";
+        String query1 = "SELECT Staff_ID FROM ADMINISTRATOR WHERE AdmissionsAdmin_flag = 1 ORDER BY RAND() Limit 1";
         PreparedStatement p1 = conn.prepareStatement(query1);
         ResultSet r = p1.executeQuery();
         if (r.next()) {
