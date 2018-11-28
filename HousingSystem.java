@@ -71,7 +71,7 @@ public class HousingSystem {
     }
 
     // Assigns an applicant a room depending on availability of inputted preferences
-    public int checkHousing(String SID, ArrayList<HousingUnit> preferences, String roommate) throws SQLException {
+    public String checkHousing(String SID, ArrayList<HousingUnit> preferences, String roommate) throws SQLException {
         int bNo = 0;
         int aptNo = 0;
         String query = "SELECT H.Occupation_status, H.Apt_Number, H.Building_number from HOUSING_UNIT H where " +
@@ -86,7 +86,7 @@ public class HousingSystem {
                 aptNo = r.getInt(2);
                 bNo = r.getInt(3);
                 createResident(SID, aptNo, bNo);
-                return aptNo;
+                return "Building No.: " + bNo + ", Unit No.: " + aptNo;
             }
         }
         ArrayList<HousingUnit> availableUnits = checkAvailability();
@@ -105,24 +105,18 @@ public class HousingSystem {
                         bNo = r2.getInt(2);
                         createResident(SID, aptNo, bNo);
                     }
-                    return aptNo;
+                    return "Building No.: " + bNo + ", Unit No.: " + aptNo;
                 }
             }
         }
 
         //Add applicant to database pending confirmation
         createApplicant(SID, preferences, roommate);
-        return -1;
+        return null;
     }
 
     public void bookHousing(String SID, int confirmation) throws SQLException {
-        if (confirmation == 1) {
-            // delete wait listed applicant
-            String query = "DELETE FROM APPLICANT WHERE ID_number = ?";
-            PreparedStatement p = conn.prepareStatement(query);
-            p.setString(1, SID);
-            p.execute();
-        } else {
+        if (confirmation != 1) {
             // delete resident
             String query2 = "DELETE FROM RESIDENT WHERE ID_number = ?";
             PreparedStatement p2 = conn.prepareStatement(query2);
