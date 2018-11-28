@@ -134,7 +134,9 @@ public class HousingClient {
                 index++;
             }
 
-            int pref1, pref2, pref3;
+            int pref1 = 0;
+            int pref2 = 0;
+            int pref3 = 0;
 
             // Obtains unique preferences
             System.out.println("\nPlease enter the index of your preference(s): ");
@@ -323,7 +325,7 @@ public class HousingClient {
                 case 4:
                     showReports(m_report);
                 case 5:
-                    return; 
+                    return;
             }
         }
     }
