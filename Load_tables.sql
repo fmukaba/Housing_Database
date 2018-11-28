@@ -33,13 +33,6 @@ LINES TERMINATED BY '\r\n'
 IGNORE 1 LINES;
 ;
 
-LOAD DATA LOCAL INFILE "/Users/simone/Downloads/Housing-Database/Housing_Database - Application.csv" 
-INTO TABLE APPLICATION
-FIELDS TERMINATED BY ',' ENCLOSED BY '"'
-LINES TERMINATED BY '\r\n'
-IGNORE 1 LINES;
-;
-
 LOAD DATA LOCAL INFILE "/Users/simone/Downloads/Housing-Database/Housing_Database - Housing_preference.csv" 
 INTO TABLE HOUSING_PREFERENCE
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
