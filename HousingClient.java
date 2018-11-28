@@ -4,6 +4,10 @@
 // HousingClient provides the user-facing interface,
 // allowing for addition to or retrieval from the Housing database
 
+// Handle if readInt() gets a string
+// Handle what happens after a applicant adds their information
+// Verify that the SID is 9 integers
+
 import java.sql.*;
 import java.util.*;
 
@@ -59,6 +63,7 @@ public class HousingClient {
         }
     }
 
+    // Displays the user log-in screen
     public static void residentLogIn() {
 
         Scanner input = new Scanner(System.in);
@@ -89,14 +94,12 @@ public class HousingClient {
 
             action = readInt("Please select an option: ", 2);
 
-
             switch (action) {
                 case 1:
                     getPreferences();
                     break;
                 case 2:
                     return;
-
             }
         }
     }
@@ -111,7 +114,6 @@ public class HousingClient {
         ArrayList<HousingUnit> hu = hs.checkAvailability(); // returns array of strings
 
         // Prints out available housing
-        //2
         System.out.printf("%-8s %-15s %-18s %-10s %-27s %s\n", "Index", "Building #", "# Bedrooms", "Type", "Allows married couples", "Price ($)");
         int index = 1;
         for (HousingUnit h : hu) {
@@ -119,7 +121,7 @@ public class HousingClient {
             index++;
         }
 
-        System.out.println("Please enter the index of your preferences: ");
+        System.out.println("\nPlease enter the index of your preferences: ");
         int pref1 = readInt("Top choice: ", index - 1);
         int pref2 = readInt("Second choice: ", index - 1);
         int pref3 = readInt("Third choice: ", index - 1);
@@ -134,6 +136,13 @@ public class HousingClient {
         String username = readString("Username: ");
         String password = readString("Password: ");
         String SID = readString("Student ID: ");
+        // boolean validSID = false;
+
+        while (!(SID.length() == 9 && isInteger(SID))){
+            System.out.println("Please enter a valid ID");
+            SID = readString("Student ID: ");
+        }
+
         String name = readString("Name: ");
         String phoneNumber = readString("Phone number: ");
         String gender = readString("Gender: ");
@@ -160,17 +169,24 @@ public class HousingClient {
         hs.createUser(SID, username, password, name, gender, student_status, marital_status, address,
                 phoneNumber, college, department, major, familyHeadID);
 
-        int aptNo = hs.bookHousing(SID, preferences, roommate);
+        int aptNo = hs.checkHousing(SID, preferences, roommate);
 
         if (aptNo != -1) {
             System.out.println("Congratulations! \nYou are now a Bellevue College resident. Your apartment is: " + aptNo);
             System.out.println("Next time you enter the portal you can log in to the resident portal.");
+            System.out.println();
+            int acceptHousing = readInt("Please press 1 to confirm, 2 to reject", 2);
+            // hs.bookHousing(SID, acceptHousing);
+
+            if (acceptHousing == 2) {
+                System.out.println("You've been added to the wait list. \nPlease check again later.");
+            }
 
         } else {
-            System.out.println("We're sorry, there is no space at this time.");
             System.out.println("You've been added to the wait list. \nPlease check again later.");
         }
 
+        return;
     }
 
     // Displays all admin options and accepts further action options
@@ -214,6 +230,7 @@ public class HousingClient {
                     return;
             }
         }
+        return;
     }
 
     // Displays the reports menu and accepts user action choice
@@ -276,7 +293,6 @@ public class HousingClient {
     }
 
     // Manages user input for integer-specific values
-    // ERROR: when user enters incorrect value --> infinite loop
     public static int readInt(String prompt, int max) {
         boolean valid = false;
         Scanner input = new Scanner(System.in);
@@ -284,16 +300,15 @@ public class HousingClient {
 
         while (!valid) {
             System.out.println(prompt);
-            if (input.hasNext()) {
-                if (input.hasNextInt()) {
-                    value = input.nextInt();
-                    if (value > 0 && value <= max) {
-                        valid = true;
-                    } else {
-                        System.out.println("Please enter valid input");
-                    }
+            if (input.hasNextInt()) {
+                value = input.nextInt();
+                if (value > 0 && value <= max) {
+                    valid = true;
+                } else {
+                    System.out.println("Please enter valid input");
                 }
             } else {
+                input.next();
                 System.out.println("Please enter valid input");
             }
         }
@@ -336,5 +351,18 @@ public class HousingClient {
         }
 
         System.out.println(text);
+    }
+
+    // Returns if a string is comprised of all integers
+    public static boolean isInteger(String str){
+        int length = str.length();
+        int value = 0;
+        for (int i = 0; i < length; i++){
+            value = str.charAt(i);
+            if (value < 48 || value > 57){
+                return false;
+            }
+        }
+        return true;
     }
 }
