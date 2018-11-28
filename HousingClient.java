@@ -16,6 +16,8 @@ public class HousingClient {
             hs = new HousingSystem();
             printMainMenu();
         } catch (SQLException e) {
+            System.out.println("A database error occurred: " + e.getMessage());
+            e.printStackTrace(System.out);
         }
     }
 
@@ -65,7 +67,7 @@ public class HousingClient {
 
         String username = input.nextLine();
 
-        System.out.print("password:");
+        System.out.print("Password:");
 
         String password = input.nextLine();
 
@@ -97,7 +99,6 @@ public class HousingClient {
 
             }
         }
-        return;
     }
 
     // TASK 1:
@@ -115,7 +116,6 @@ public class HousingClient {
         int index = 1;
         for (HousingUnit h : hu) {
             System.out.printf("%-8d %-15s %-18s %-10s %-27s %s %s", index, h.getBuilding(), h.getBedrooms(), h.getType(), h.getMarried(), h.getPrice(), "\n");
-            // System.out.println(index + h.getBuilding() + h.getBedrooms() + h.getType() + h.getMarried() + h.getPrice());
             index++;
         }
 
@@ -153,25 +153,24 @@ public class HousingClient {
         }
 
         boolean student_status = true;
-        if (student_status_int == 0) {
+        if (student_status_int == 2) {
             student_status = false;
         }
 
         hs.createUser(SID, username, password, name, gender, student_status, marital_status, address,
                 phoneNumber, college, department, major, familyHeadID);
 
-        boolean success = hs.bookHousing(SID, preferences, roommate);
+        int aptNo = hs.bookHousing(SID, preferences, roommate);
 
-        if (success) {
-            System.out.println("Congratulations! \nYou are now a Bellevue College resident.");
-            System.out.println("Next time you enter the portal you can log in to the resident portal");
+        if (aptNo != -1) {
+            System.out.println("Congratulations! \nYou are now a Bellevue College resident. Your apartment is: " + aptNo);
+            System.out.println("Next time you enter the portal you can log in to the resident portal.");
 
         } else {
             System.out.println("We're sorry, there is no space at this time.");
-            System.out.println("You've been added to the waitlist. \nPlease check again later");
+            System.out.println("You've been added to the wait list. \nPlease check again later.");
         }
 
-        return;
     }
 
     // Displays all admin options and accepts further action options
@@ -184,7 +183,7 @@ public class HousingClient {
             System.out.println("Welcome to Bellevue College Housing System");
             formatString("Administrators Staff", 10, " ");
             formatString("1. Manage Residents", 4, " ");
-            formatString("1. Manage Applicants", 4, " ");
+            formatString("2. Manage Applicants", 4, " ");
             formatString("3. Demographic Studies", 4, " ");
             formatString("4. Manage Maintenance orders", 4, " ");
             formatString("5. Administrative Reports", 4, " ");
@@ -215,7 +214,6 @@ public class HousingClient {
                     return;
             }
         }
-        return;
     }
 
     // Displays the reports menu and accepts user action choice
@@ -257,7 +255,6 @@ public class HousingClient {
                     return; //printAdminTop(); -> needed?
             }
         }
-        return;
     }
 
     // TASK 2:
@@ -279,6 +276,7 @@ public class HousingClient {
     }
 
     // Manages user input for integer-specific values
+    // ERROR: when user enters incorrect value --> infinite loop
     public static int readInt(String prompt, int max) {
         boolean valid = false;
         Scanner input = new Scanner(System.in);
