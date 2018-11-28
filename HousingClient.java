@@ -4,10 +4,6 @@
 // HousingClient provides the user-facing interface,
 // allowing for addition to or retrieval from the Housing database
 
-// Handle if readInt() gets a string
-// Handle what happens after a applicant adds their information
-// Verify that the SID is 9 integers
-
 import java.sql.*;
 import java.util.*;
 
@@ -76,7 +72,7 @@ public class HousingClient {
 
         String password = input.nextLine();
 
-        System.out.println("Page down. Try again later.\n");
+        System.out.println("\nWe're sorry, this page is not available at this time.\nPlease try again later");;
         return;
     }
 
@@ -121,24 +117,35 @@ public class HousingClient {
             index++;
         }
 
+        // Obtains unique preferences
         System.out.println("\nPlease enter the index of your preferences: ");
         int pref1 = readInt("Top choice: ", index - 1);
         int pref2 = readInt("Second choice: ", index - 1);
+
+        while (pref1 == pref2){
+            System.out.println("Please enter a different value");
+            pref2 = readInt("Second choice: ", index - 1);
+        }
+
         int pref3 = readInt("Third choice: ", index - 1);
+        while (pref1 == pref3 || pref2 == pref3){
+            System.out.println("Please enter a different value");
+            pref3 = readInt("Third choice: ", index - 1);
+        }
 
         //construct array of preferences to be sent to backend
         ArrayList<HousingUnit> preferences = new ArrayList<>(Arrays.asList(hu.get(pref1 - 1), hu.get(pref2 - 1), hu.get(pref3 - 1)));
 
+        // Obtains applicant information, validating input
         System.out.println("Please fill out the following information:\n");
 
         System.out.println("User information");
 
         String username = readString("Username: ");
         String password = readString("Password: ");
-        String SID = readString("Student ID: ");
-        // boolean validSID = false;
 
-        while (!(SID.length() == 9 && isInteger(SID))){
+        String SID = readString("Student ID: ");
+        while (!(SID.length() == 9 && isInteger(SID))){ // validates SID
             System.out.println("Please enter a valid ID");
             SID = readString("Student ID: ");
         }
@@ -148,17 +155,16 @@ public class HousingClient {
         String gender = readString("Gender: ");
         int student_status_int = readInt("Student status (1 if student, 2 if not): ", 2);
         int marital_status_int = readInt("Marital status (1 if married, 2 if single): ", 2);
-        String address = readString("Address: ");
+        String homeAddress = readString("Address: ");
         String college = readString("College: ");
         String department = readString("Department: ");
         String major = readString("Major: ");
         String familyHeadSSN = readString("Family head's SSN (enter your own if it's you: ");
-        //
-        while (!(familyHeadSSN.length() == 9 && isInteger(familyHeadSSN))){
+
+        while (!(familyHeadSSN.length() == 9 && isInteger(familyHeadSSN))){ // validates SSN
             System.out.println("Please enter a valid ID");
             familyHeadSSN = readString("Family head's SSN: ");
         }
-
 
         String roommate = readString("Roommate Name: ");
 
@@ -173,13 +179,25 @@ public class HousingClient {
             student_status = false;
         }
 
-        hs.createUser(SID, username, password, name, gender, student_status, marital_status, address,
-                phoneNumber, college, department, major, familyHeadSSN);
+        try {
+            hs.createUser(SID, username, password, name, gender, student_status, marital_status, homeAddress,
+                    phoneNumber, college, department, major, familyHeadSSN);
 
-        String address = hs.checkHousing(SID, preferences, roommate);
+        } catch (SQLException e) {
+            System.out.println("A database error occurred: " + e.getMessage());
+            System.out.println("Would you like to restart your application?");
+            int reset = readInt("1 for yes, 2 for no: ", 2);
+            if (reset == 1){
+                getPreferences();
+            } else {
+                printApplicantTop();
+            }
+        }
 
-        if (!address.equals(null)) {
-            System.out.println("Congratulations! \nYou are now a Bellevue College resident. \nYour address is: " + address);
+        String newAddress = hs.checkHousing(SID, preferences, roommate);
+
+        if (!newAddress.equals(null)) {
+            System.out.println("Congratulations! \nYou are now a Bellevue College resident. \nYour address is: " + newAddress);
             System.out.println("Next time you enter the portal you can log in to the resident portal.");
             System.out.println();
             int acceptHousing = readInt("Please press 1 to confirm, 2 to reject", 2);
@@ -218,14 +236,16 @@ public class HousingClient {
 
             System.out.println("Please select an option: ");
 
-
             while (!valid) {
                 action = input.nextInt();
 
                 if (action == 5 || action == 6) {
                     valid = true;
-                } else {
+                } else if (action > 6 || action < 1) {
                     System.out.println("Please enter a valid action: ");
+                } else {
+                    System.out.println("We're sorry, this page is not available at this time.\nPlease try again later");
+                    System.out.println("Please select an option: ");
                 }
             }
 
@@ -265,8 +285,11 @@ public class HousingClient {
 
                 if (action == 4 || action == 5) {
                     valid = true;
-                } else {
+                } else if (action > 5 || action < 1){
                     System.out.println("Please enter a valid action: ");
+                } else {
+                    System.out.println("We're sorry, this page is not available at this time.\nPlease try again later");
+                    System.out.println("Please select an option: ");
                 }
             }
 
@@ -286,13 +309,11 @@ public class HousingClient {
     public static void showReports(ArrayList<MaintenanceRequestDue> m_report) {
 
         repeat(42, "*");
-        System.out.println("\nActive maintenance requests: \n");
-        System.out.println("Please note: A date of 0000-00-00 indicates work that has not been completed yet.\n");
-
-        System.out.printf("%-20s %-15s %-16s %-20s %-20s %-20s\n", "Tenant", "Building #", "Apartment #", "Submission date", "Date completed", "Comments");
+        System.out.println("Active maintenance requests: \n");
+        System.out.printf("%-20s %-15s %-16s %-20s %-20s\n", "Tenant", "Building #", "Apartment #", "Submission date", "Comments");
 
         for (MaintenanceRequestDue request: m_report){
-            System.out.printf("%-20s %-15s %-16s %-20s %-20s %-20s\n",  request.getName(), request.getBuilding(), request.getAptNum(), request.getSubDate(), request.getDateCompleted(), request.getComm());
+            System.out.printf("%-20s %-15s %-16s %-20s %-20s\n",  request.getName(), request.getBuilding(), request.getAptNum(), request.getSubDate(), request.getComm());
         }
 
         System.out.println();
