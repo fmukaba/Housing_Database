@@ -71,7 +71,7 @@ public class HousingSystem {
     }
 
     // Assigns an applicant a room depending on availability of inputted preferences
-    public int bookHousing(String SID, ArrayList<HousingUnit> preferences, String roommate) throws SQLException {
+    public int checkHousing(String SID, ArrayList<HousingUnit> preferences, String roommate) throws SQLException {
         int bNo = 0;
         int aptNo = 0;
         String query = "SELECT H.Occupation_status, H.Apt_Number, H.Building_number from HOUSING_UNIT H where " +
@@ -110,15 +110,31 @@ public class HousingSystem {
             }
         }
 
-        // If booking could not be completed (a room not available at this time), applicant added to database
+        //Add applicant to database pending confirmation
         createApplicant(SID, preferences, roommate);
         return -1;
+    }
+
+    public void bookHousing(String SID, int confirmation) throws SQLException {
+        if (confirmation == 1) {
+            // delete wait listed applicant
+            String query = "DELETE FROM APPLICANT WHERE ID_number = ?";
+            PreparedStatement p = conn.prepareStatement(query);
+            p.setString(1, SID);
+            p.execute();
+        } else {
+            // delete resident
+            String query2 = "DELETE FROM RESIDENT WHERE ID_number = ?";
+            PreparedStatement p2 = conn.prepareStatement(query2);
+            p2.setString(1, SID);
+            p2.execute();
+        }
     }
 
     // If room booking goes through, create a resident and add them to the database
     public void createResident(String ID, int aptNo, int bNo) throws SQLException {
         String adminStaffID = "NULL";
-        String query1 = "SELECT Staff_ID FROM ADMINISTRATOR WHERE Dept_name = 'Residency' ORDER BY RAND() Limit 1";
+        String query1 = "SELECT Staff_ID FROM ADMINISTRATOR WHERE ResidentAdmin_flag == 1 ORDER BY RAND() Limit 1";
         PreparedStatement p1 = conn.prepareStatement(query1);
         ResultSet r = p1.executeQuery();
         if (r.next()) {
@@ -127,6 +143,7 @@ public class HousingSystem {
             System.out.print("ERROR: No admin assigned for residents. ");
             return;
         }
+
         String query2 = "INSERT INTO RESIDENT(ID_number, Admin_staff_ID, Move_in_date, Check_out_date, " +
                 "Building_number, Apt_number, Rent_till_date)" +
                 " VALUES (?, ?, NULL, NULL, ?, ?, 0)";
@@ -163,12 +180,23 @@ public class HousingSystem {
         }
     }
 
-    // Add applicant who did not get into the system (waitlist)
+    // Add applicant who did not get into the system (wait list)
     public void createApplicant(String ID, ArrayList<HousingUnit> preferences, String roommate) throws SQLException {
+        String resStaffID = "NULL";
+        String query1 = "SELECT Staff_ID FROM ADMINISTRATOR WHERE AdmissionsAdmin_flag == 1 ORDER BY RAND() Limit 1";
+        PreparedStatement p1 = conn.prepareStatement(query1);
+        ResultSet r = p1.executeQuery();
+        if (r.next()) {
+            resStaffID = r.getString(1);
+        } else {
+            System.out.print("ERROR: No admin assigned for residents. ");
+            return;
+        }
 
-        String query = "INSERT INTO APPLICANT(ID_number, Acceptance_status) VALUES (?, 0)";
+        String query = "INSERT INTO APPLICANT(ID_number, Staff_ID) VALUES (?, ?)";
         PreparedStatement p = conn.prepareStatement(query);
         p.setString(1, ID);
+        p.setString(2, resStaffID);
         p.execute();
 
         int index = 1;
