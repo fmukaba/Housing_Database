@@ -187,10 +187,10 @@ public class HousingSystem {
         // String CurrentDate = "2018-11-18";
 
         try {
-            String query = "SELECT USER.Name, Building_number, Apt_number, Submission_date, Date_Completed, Comments "
-                    + "FROM RESIDENT, MAINTENANCE_REQUEST, USER "
-                    + "WHERE RESIDENT.ID_NUMBER = USER.ID_NUMBER and Date_Completed <= \"2018-11-18\" " // currentDate
-                    + "ORDER BY Submission_date DESC" ;
+           String query = "SELECT request_number, USER.Name, Building_number, Apt_number, Submission_date, Date_Completed, Comments,issue_desc\r\n"
+					+ "FROM RESIDENT, MAINTENANCE_REQUEST, USER\r\n"
+					+ "WHERE maintenance_request.Resident_ID = RESIDENT.ID_NUMBER and  RESIDENT.ID_NUMBER = USER.ID_NUMBER AND Status = \"In process\"\r\n"
+					+ "Order BY submission_date desc\r\n" + ";\r\n" ;
             PreparedStatement p = conn.prepareStatement(query);
             // p.setString(1, CurrentDate);
             p.clearParameters();
