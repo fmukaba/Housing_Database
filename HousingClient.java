@@ -152,7 +152,14 @@ public class HousingClient {
         String college = readString("College: ");
         String department = readString("Department: ");
         String major = readString("Major: ");
-        String familyHeadID = readString("Family head's SSN: ");
+        String familyHeadSSN = readString("Family head's SSN (enter your own if it's you: ");
+        //
+        while (!(familyHeadSSN.length() == 9 && isInteger(familyHeadSSN))){
+            System.out.println("Please enter a valid ID");
+            familyHeadSSN = readString("Family head's SSN: ");
+        }
+
+
         String roommate = readString("Roommate Name: ");
 
         // Translate the input values into boolean values
@@ -167,16 +174,16 @@ public class HousingClient {
         }
 
         hs.createUser(SID, username, password, name, gender, student_status, marital_status, address,
-                phoneNumber, college, department, major, familyHeadID);
+                phoneNumber, college, department, major, familyHeadSSN);
 
-        int aptNo = hs.checkHousing(SID, preferences, roommate);
+        String address = hs.checkHousing(SID, preferences, roommate);
 
-        if (aptNo != -1) {
-            System.out.println("Congratulations! \nYou are now a Bellevue College resident. Your apartment is: " + aptNo);
+        if (!address.equals(null)) {
+            System.out.println("Congratulations! \nYou are now a Bellevue College resident. \nYour address is: " + address);
             System.out.println("Next time you enter the portal you can log in to the resident portal.");
             System.out.println();
             int acceptHousing = readInt("Please press 1 to confirm, 2 to reject", 2);
-            // hs.bookHousing(SID, acceptHousing);
+            hs.bookHousing(SID, acceptHousing);
 
             if (acceptHousing == 2) {
                 System.out.println("You've been added to the wait list. \nPlease check again later.");
