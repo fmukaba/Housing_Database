@@ -228,9 +228,22 @@ public class HousingSystem {
                     r.getString(4), r.getString(5), r.getString(6));
             list.add(row);
         }
-
         return list;
     }
-
+    
+      public boolean checkResident(String username, String password) throws SQLException {
+    	   boolean check = false;
+    	   String query = "SELECT username, password " +
+                   "From Resident";
+           PreparedStatement p = conn.prepareStatement(query);
+           p.clearParameters();
+           ResultSet r = p.executeQuery();
+           while (r.next()) {
+               if(r.getString(1).equals(username) && r.getString(2).equals(password)) {
+            	   check = true;
+               }
+           }
+           return check;
+    }
 }
 
