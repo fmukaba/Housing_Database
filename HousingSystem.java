@@ -115,14 +115,13 @@ public class HousingSystem {
         return null;
     }
 
-    public void bookHousing(String SID, int confirmation) throws SQLException {
-        if (confirmation != 1) {
-            // delete resident
-            String query2 = "DELETE FROM RESIDENT WHERE ID_number = ?";
-            PreparedStatement p2 = conn.prepareStatement(query2);
-            p2.setString(1, SID);
-            p2.execute();
-        }
+    public void bookHousing(String SID) throws SQLException {
+        // delete resident
+        String query2 = "DELETE FROM RESIDENT WHERE ID_number = ?";
+        PreparedStatement p2 = conn.prepareStatement(query2);
+        p2.setString(1, SID);
+        p2.execute();
+
     }
 
     // If room booking goes through, create a resident and add them to the database
@@ -230,20 +229,20 @@ public class HousingSystem {
         }
         return list;
     }
-    
-      public boolean checkResident(String username, String password) throws SQLException {
-    	   boolean check = false;
-    	   String query = "SELECT username, password " +
-                   "From Resident";
-           PreparedStatement p = conn.prepareStatement(query);
-           p.clearParameters();
-           ResultSet r = p.executeQuery();
-           while (r.next()) {
-               if(r.getString(1).equals(username) && r.getString(2).equals(password)) {
-            	   check = true;
-               }
-           }
-           return check;
+
+    public boolean checkResident(String username, String password) throws SQLException {
+        boolean check = false;
+        String query = "SELECT username, password " +
+                "From Resident";
+        PreparedStatement p = conn.prepareStatement(query);
+        p.clearParameters();
+        ResultSet r = p.executeQuery();
+        while (r.next()) {
+            if(r.getString(1).equals(username) && r.getString(2).equals(password)) {
+                check = true;
+            }
+        }
+        return check;
     }
 }
 
