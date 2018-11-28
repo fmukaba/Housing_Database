@@ -183,7 +183,8 @@ public class HousingSystem {
         try {
             String query = "SELECT USER.Name, Building_number, Apt_number, Submission_date, Date_Completed, Comments "
                     + "FROM RESIDENT, MAINTENANCE_REQUEST, USER "
-                    + "WHERE RESIDENT.ID_NUMBER = USER.ID_NUMBER and Submission_date <= \"2018-11-18\" "; // currentDate
+                    + "WHERE RESIDENT.ID_NUMBER = USER.ID_NUMBER and Date_Completed <= \"2018-11-18\" " // currentDate
+                    + "ORDER BY Submission_date DESC" ;
             PreparedStatement p = conn.prepareStatement(query);
             // p.setString(1, CurrentDate);
             p.clearParameters();
