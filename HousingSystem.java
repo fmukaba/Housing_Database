@@ -44,8 +44,8 @@ public class HousingSystem {
     }
 
     public void createUser(String ID, String username, String password, String name, String gender,
-                                boolean studentStatus, boolean maritalStatus, String address, String phoneNumber,
-                                String college, String department, String major, String familyHeadID)
+                           boolean studentStatus, boolean maritalStatus, String address, String phoneNumber,
+                           String college, String department, String major, String familyHeadID)
             throws SQLException {
         String query = "INSERT INTO USER(ID_number, Username, Password, Name, Gender," +
                 "                             Student_status, Marital_Status,Address, Phone_number," +
@@ -178,18 +178,16 @@ public class HousingSystem {
 
     public static ArrayList<MaintenanceRequestDue> runReports() {
         ArrayList<MaintenanceRequestDue> list = new ArrayList<MaintenanceRequestDue>();
-        String CurrentDate = "";
-        System.out.println("Active maintenance requests: ");
+        // String CurrentDate = "2018-11-18";
 
         try {
-            String query = "SELECT USER.Name, Building_number, Apt_number, Submission_date, Date_Completed, Comments\r\n"
-                    + "FROM RESIDENT, MAINTENANCE_REQUEST, USER\r\n"
-                    + "WHERE RESIDENT.ID_NUMBER = USER.ID_NUMBER and Submission_date <= ? "; // currentDate
+            String query = "SELECT USER.Name, Building_number, Apt_number, Submission_date, Date_Completed, Comments "
+                    + "FROM RESIDENT, MAINTENANCE_REQUEST, USER "
+                    + "WHERE RESIDENT.ID_NUMBER = USER.ID_NUMBER and Submission_date <= \"2018-11-18\" "; // currentDate
             PreparedStatement p = conn.prepareStatement(query);
-            p.setString(1, CurrentDate);
+            // p.setString(1, CurrentDate);
             p.clearParameters();
             ResultSet r = p.executeQuery();
-            System.out.println("\nRESULTS: ");
             while (r.next()) {
                 MaintenanceRequestDue row = new MaintenanceRequestDue(r.getString(1), r.getString(2), r.getString(3),
                         r.getString(4), r.getString(5), r.getString(6));
