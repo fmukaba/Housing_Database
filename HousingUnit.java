@@ -20,6 +20,14 @@ public class HousingUnit {
         this.price = price;
     }
 
+    public HousingUnit(){
+        this.building = -1;
+        this.bedrooms = -1;
+        this.type = "null";
+        this.married = false;
+        this.price = -1;
+    }
+
     public int getBuilding() {
         return building;
     }
