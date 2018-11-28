@@ -1,22 +1,3 @@
-// USERS:
-// Make all residents ->
-
-// Catch exceptions in the client
-
-// QUERIES:
-// Does applicant info match one of their preferences? If so, make it so that they are a resident there
-
-// Need to match preference with what's available ->
-
-// AVAILABILITY:
-// Housing_unit -> if available, not full = 0; full = 1
-// Showing results -> change in housing unit too
-//    Building number, no of bedrooms, type, rent, married couples -> number item
-//    Ask preferences 1, 2, 3 -> corresponds with numbered query results
-// After: type in user information -> add that user to user table
-// PRINT IT TO THE CONSOLE WITH THE INDEX FROM AN ARRAYLIST
-// Then match them
-
 import java.sql.*;
 import java.util.*;
 
@@ -176,10 +157,9 @@ public class HousingClient {
         } else {
             System.out.println("We're sorry, there is no space at this time.");
             System.out.println("You've been added to the waitlist. \nPlease check again later");
-            // hs.addToWaitlist(SID, preferences, roommate);
-
-            return;
         }
+
+        return;
     }
 
     // Displays all admin options and accepts further action options
@@ -248,8 +228,9 @@ public class HousingClient {
 
                 if (action == 4 || action == 5) {
                     valid = true;
+                } else {
+                    System.out.println("Please enter a valid action: ");
                 }
-                System.out.println("Please enter a valid action: ");
             }
 
             ArrayList<MaintenanceRequestDue> m_report =  hs.runReports();
@@ -268,13 +249,13 @@ public class HousingClient {
     // Prints the current maintenance results
     public static void showReports(ArrayList<MaintenanceRequestDue> m_report) {
 
-        System.out.println("Active maintenance requests: ");
+        System.out.println("Active maintenance requests: \n");
+        System.out.println("Please note: A date of 0000-00-00 indicates work that has not been completed yet.\n");
 
-        System.out.printf("%s %20s %5s %5s %10s %10s %s", "Name", "Building number", "Apt. number", "Submission date", "Date completed", "Comments", "\n");
+        System.out.printf("%-20s %-15s %-16s %-20s %-20s %-20s\n", "Tenant", "Building #", "Apartment #", "Submission date", "Date completed", "Comments");
 
         for (MaintenanceRequestDue request: m_report){
-            System.out.printf("%s %20s %5s %5s %10s %10s %s",  request.getName(), request.getBuilding(), request.getAptNum(), request.getSubDate(), request.getDateCompleted(), request.getComm(), "\n");
-
+            System.out.printf("%-20s %-15s %-16s %-20s %-20s %-20s\n",  request.getName(), request.getBuilding(), request.getAptNum(), request.getSubDate(), request.getDateCompleted(), request.getComm());
         }
 
         System.out.println();
