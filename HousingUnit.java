@@ -1,3 +1,8 @@
+// CS 331 Project Assignment Part B
+// Jena Lovejoy, Franck Mukaba, Simone Ray
+// Due Wednesday, November 28 2018
+// HousingUnit represents individual apartments or suites available to students
+
 import java.util.Objects;
 
 public class HousingUnit {
