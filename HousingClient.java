@@ -86,7 +86,7 @@ public class HousingClient {
     // Displays the applicant options and accepts an action
     public static void printApplicantTop() throws SQLException {
         int action = 0;
-        while (action != 3) {
+        while (action > 1) {
             System.out.println();
             repeat(42, "*");
             formatString("Welcome Applicant!", 12, " ");
@@ -100,6 +100,7 @@ public class HousingClient {
             switch (action) {
                 case 1:
                     getPreferences();
+                    action = 2;
                     break;
                 case 2:
                     return;
@@ -114,34 +115,51 @@ public class HousingClient {
         repeat(42, "*");
 
         System.out.println("The following housing options are available: ");
-        ArrayList<HousingUnit> hu = hs.checkAvailability(); // returns array of strings
+        ArrayList<HousingUnit> hu = hs.checkAvailability(); // returns array of available units
+        ArrayList<HousingUnit> preferences = new ArrayList<>();
 
-        // Prints out available housing
-        System.out.printf("%-8s %-15s %-18s %-10s %-27s %s\n", "Index", "Building #", "# Bedrooms", "Type", "Allows married couples", "Price ($)");
-        int index = 1;
-        for (HousingUnit h : hu) {
-            System.out.printf("%-8d %-15s %-18s %-10s %-27s %s %s", index, h.getBuilding(), h.getBedrooms(), h.getType(), h.getMarried(), h.getPrice(), "\n");
-            index++;
+        if (hu.isEmpty()) {
+            System.out.println("We're sorry, there are no available housing options at this time.\n" +
+                    "Please fill out the application below, and we will add you to the waitlist");
+
+            HousingUnit nullUnit = new HousingUnit();
+            preferences.addAll(Arrays.asList(nullUnit, nullUnit, nullUnit)); // dummy units to be processed with application
+
+        } else {
+            // Prints out available housing
+            System.out.printf("%-8s %-15s %-18s %-10s %-27s %s\n", "Index", "Building #", "# Bedrooms", "Type", "Allows married couples", "Price ($)");
+            int index = 1;
+            for (HousingUnit h : hu) {
+                System.out.printf("%-8d %-15s %-18s %-10s %-27s %s %s", index, h.getBuilding(), h.getBedrooms(), h.getType(), h.getMarried(), h.getPrice(), "\n");
+                index++;
+            }
+
+            int pref1, pref2, pref3;
+
+            // Obtains unique preferences
+            System.out.println("\nPlease enter the index of your preference(s): ");
+
+            pref1 = readInt("Top choice: ", index - 1);
+
+            if (index > 1) {
+                pref2 = readInt("Second choice: ", index - 1);
+
+                while (pref1 == pref2) {
+                    System.out.println("Please enter a different value");
+                    pref2 = readInt("Second choice: ", index - 1);
+                }
+            }
+            if (index > 2) {
+                pref3 = readInt("Third choice: ", index - 1);
+                while (pref1 == pref3 || pref2 == pref3) {
+                    System.out.println("Please enter a different value");
+                    pref3 = readInt("Third choice: ", index - 1);
+                }
+            }
+
+            //construct array of preferences to be sent to backend
+            preferences.addAll(Arrays.asList(hu.get(pref1 - 1), hu.get(pref2 - 1), hu.get(pref3 - 1)));
         }
-
-        // Obtains unique preferences
-        System.out.println("\nPlease enter the index of your preferences: ");
-        int pref1 = readInt("Top choice: ", index - 1);
-        int pref2 = readInt("Second choice: ", index - 1);
-
-    //    while (pref1 == pref2){
-    //        System.out.println("Please enter a different value");
-    //        pref2 = readInt("Second choice: ", index - 1);
-    //    }
-
-        int pref3 = readInt("Third choice: ", index - 1);
-     //   while (pref1 == pref3 || pref2 == pref3){
-     //       System.out.println("Please enter a different value");
-     //       pref3 = readInt("Third choice: ", index - 1);
-     //   }
-
-        //construct array of preferences to be sent to backend
-        ArrayList<HousingUnit> preferences = new ArrayList<>(Arrays.asList(hu.get(pref1 - 1), hu.get(pref2 - 1), hu.get(pref3 - 1)));
 
         // Obtains applicant information, validating input
         System.out.println("Please fill out the following information:\n");
@@ -205,20 +223,16 @@ public class HousingClient {
         String newAddress = hs.checkHousing(SID, preferences, roommate);
 
         if (!newAddress.equals(null)) {
-            System.out.println(" \nWe have an available unit. Address is " + newAddress);
+            System.out.println("Congratulations! You are now a Bellevue College resident.");
+            System.out.println("Your new address is " + newAddress);
             System.out.println();
-            int acceptHousing = readInt("Please press 1 to confirm, 2 to reject", 2);
 
-            if (acceptHousing == 2) {
-                System.out.println("You've been added to the wait list. \nWe will send you an email if accepted.");
-            } else {
-                hs.bookHousing(SID, acceptHousing); // Add resident to the database
-                System.out.println("Congratulations! You are now a Bellevue College resident. ");
-                System.out.println("Next time you enter the portal you can log in as a resident.");
-            }
+            hs.bookHousing(SID); // Add resident to the database
+            System.out.println("Next time you enter the portal you can log in as a resident.");
 
-        } else { // Iv no units available, add to wait list
-            System.out.println("You've been added to the wait list. \nPlease check again later.");
+
+        } else { // If no units are available, add applicant to the waitlist
+            System.out.println("You've been added to the waitlist. \nWe will reach out when a unit is available.");
         }
 
         return;
@@ -309,7 +323,7 @@ public class HousingClient {
                 case 4:
                     showReports(m_report);
                 case 5:
-                    return; //printAdminTop(); -> needed?
+                    return; 
             }
         }
     }
