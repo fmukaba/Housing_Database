@@ -60,7 +60,7 @@ public class HousingClient {
     }
 
     // Displays the user log-in screen
-    public static void residentLogIn() {
+    public static void residentLogIn() throws SQLException{
 
         Scanner input = new Scanner(System.in);
 
@@ -72,8 +72,15 @@ public class HousingClient {
 
         String password = input.nextLine();
 
-        System.out.println("\nWe're sorry, this page is not available at this time.\nPlease try again later");;
-        return;
+        boolean exists = hs.checkResident(username, password);
+
+        if(exists) {
+            System.out.println("\n Hello resident! \nWe're sorry, this page is not available at this time.\nPlease try again later");
+            return;
+        } else {
+            System.out.println("You are not a resident.");
+            return;
+        }
     }
 
     // Displays the applicant options and accepts an action
