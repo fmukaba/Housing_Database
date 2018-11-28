@@ -19,7 +19,7 @@ Family_head_ID      VARCHAR(9),
 PRIMARY KEY (ID_number)
 );
 
-ALTER TABLE USER ADD FOREIGN KEY(Family_head_ID) references USER(ID_number) on delete cascade;
+-- ALTER TABLE USER ADD FOREIGN KEY(Family_head_ID) references USER(ID_number) on delete cascade;
 
 CREATE TABLE ADMINISTRATOR (
 
@@ -76,19 +76,6 @@ PRIMARY KEY (ID_number),
 FOREIGN KEY (ID_number) REFERENCES USER (ID_number) on delete cascade
 );
 
-CREATE TABLE APPLICATION (
-
-Application_number      INT           NOT NULL     AUTO_INCREMENT,
-Admin_staff_ID          VARCHAR(9)    NOT NULL,
-User_ID_number          VARCHAR(9)    NOT NULL,
-Fee_paid                BOOLEAN,
-Admission_status        BOOLEAN,
-
-PRIMARY KEY (Application_number),
-FOREIGN KEY  (Admin_staff_ID) REFERENCES ADMINISTRATOR(Staff_ID) on delete cascade,
-FOREIGN KEY (User_ID_number) REFERENCES USER(ID_number) on delete cascade
-);
-
 CREATE TABLE HOUSING_PREFERENCE (
 ID_number               VARCHAR(9)     NOT NULL,
 Building_preference     TINYINT,
@@ -97,7 +84,7 @@ Bedroom_preference	    TINYINT,
 Order_of_preference     TINYINT,
 Roommate_preference     VARCHAR(150),
 
-FOREIGN KEY (Application_number) REFERENCES APPLICATION(Application_number) on delete cascade
+FOREIGN KEY (ID_number) REFERENCES APPLICANT(ID_number) on delete cascade
 );
 
 CREATE TABLE MAINTENANCE_REQUEST (
@@ -105,8 +92,8 @@ Request_number          INT           NOT NULL,
 Resident_ID             VARCHAR(9)    NOT NULL,
 Admin_staff_ID          VARCHAR(9)    NOT NULL,
 Issue_desc              VARCHAR(150),
-Submission_date         DATE,
-Date_completed          DATE,
+Submission_date         VARCHAR(15),
+Date_completed          VARCHAR(15),
 Status                  VARCHAR(150),
 Comments                TEXT,
 
@@ -115,3 +102,12 @@ FOREIGN KEY (Resident_ID) REFERENCES RESIDENT(ID_number) on delete cascade,
 FOREIGN KEY (Admin_staff_ID) REFERENCES ADMINISTRATOR(Staff_ID) on delete cascade
 
 );
+
+DROP SCHEMA HOUSING;
+DROP TABLE USER;
+DROP TABLE ADMINISTRATOR;
+DROP TABLE HOUSING_UNIT;
+DROP TABLE RESIDENT;
+DROP TABLE APPLICANT;
+DROP TABLE HOUSING_PREFERENCE;
+DROP TABLE MAINTENANCE_REQUEST;
