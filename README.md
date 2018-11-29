@@ -19,7 +19,7 @@
 - Housing_Database - Waitlisted Applicant.csv
 
 ## Running the program
-- HousingSystem.java
-- HousingClient.java
-- HousingUnit.java
-- MaintenanceRequestDue.java
+- Download HousingSystem.java
+- Download HousingClient.java
+- Download HousingUnit.java
+- Download MaintenanceRequestDue.java
