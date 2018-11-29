@@ -1,0 +1,15 @@
+Building_number,Apt_number,Bedroom_number,Max_people,Married_couple_allowed,Bed_number,Housing_type,Occupation_status,Price/Quarter
+1,100,2,4,0,4,Apt,1,3300
+1,101,1,1,0,1,Suite,1,4500
+1,102,1,2,1,2,Suite,0,3600
+1,103,2,2,1,2,Suite,1,4000
+1,104,2,3,0,3,Suite,1,2500
+2,200,2,4,0,4,Apt,1,3300
+2,201,1,1,0,1,Suite,1,4500
+2,202,1,2,1,2,Suite,1,3600
+2,203,2,3,0,3,Suite,1,2500
+3,300,1,1,0,1,Suite,1,4500
+4,400,2,4,0,4,Apt,0,3300
+4,401,2,4,0,4,Apt,0,3300
+4,402,2,4,0,4,Apt,0,3300
+4,403,4,4,0,4,Apt,1,4000

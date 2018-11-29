@@ -1,5 +1,3 @@
-# Breakdown of files in this profile
-
 ## Overall
 - Link to video presentation : https://youtu.be/QjKRXO0wKxw
 - Project Report.docx

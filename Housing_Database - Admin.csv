@@ -1,0 +1,11 @@
+Staff_ID,SSN,Name,Gender,Phone_number,Job_title,ResidentAdmin_flag,MaintenanceAdmin_flag,AdmissionsAdmin_flag
+994678399,950667834,Fred Gautier,M,4253658289,Assistant Lead,1,0,0
+783999946,950678302,Jeff Lock,M,2064849393,Staff Lead,1,0,0
+986778399,932139309,Adam Esparza,M,4255985034,Staff,1,0,1
+579317534,974937723,Nicole Sue,F,2034928742,Assistant Lead,0,0,1
+834585903,917638323,Veronica Juarez,F,4254734632,Staff Lead,0,0,1
+749376502,912885093,Robert Almada,M,2056383631,Staff,0,1,0
+759765430,943748373,Ruth Morrow,F,4253427333,Assistant Lead,0,1,0
+519936353,893474943,Dennis Maseke,M,4254378372,Staff,0,1,0
+364663899,840938433,Sakura irey,F,2537323292,Staff,0,1,0
+389836553,938947334,Jena Lawrence,F,4253427322,Staff,0,1,0

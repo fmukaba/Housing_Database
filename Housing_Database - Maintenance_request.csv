@@ -1,0 +1,13 @@
+Request_number,Resident_ID,Admin_staff_ID,Issue_desc,Submission_date,Date_completed,Status,Comments
+1239874,950280021,749376502,sink broken,2018-05-23,2018-05-31,Completed,fixed
+1239839,950778432,759765430,ceiling leaking,2018-04-19,2018-04-23,Completed,fixed
+1239456,950221890,519936353,power outtage,2018-04-30,2018-05-02,Completed,new fridge in place
+1239125,674559076,364663899,dirty carpet,2018-06-21,2018-06-28,Completed,cleaned
+1239557,674223490,389836553,dirty carpet,2018-04-19,2018-04-30,Completed,cleaned
+1239703,674223486,749376502,sink broken,2018-05-23,2018-05-25,Completed,fixed
+1239845,950347266,749376502,oven damaged,2018-03-14,NULL,pending,will take time
+1239128,950347287,759765430,sink broken,2018-07-13,NULL,pending,TODO
+1239454,950347288,519936353,ceiling leaking,2018-05-09,NULL,pending,check Veronica
+1239932,950059225,364663899,oven damaged,2018-04-19,NULL,pending,check Veronica
+1239746,950729675,389836553,power outtage,2018-05-26,NULL,pending,Call PSE
+1239450,674582830,389836553,fridge damaged,2018-06-16,2018-06-25,Completed,new fridge in place
