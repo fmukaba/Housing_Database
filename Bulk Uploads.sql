@@ -8,7 +8,7 @@ LINES TERMINATED BY '\r\n'
 IGNORE 1 LINES;
 ;
 
-LOAD DATA LOCAL INFILE "/Users/simone/Downloads/Housing-Database/Housing_Database - Admin.csv" 
+LOAD DATA LOCAL INFILE "/Users/simone/Downloads/Housing-Database/Housing_Database - Administrator.csv" 
 INTO TABLE ADMINISTRATOR
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\r\n'
@@ -29,7 +29,7 @@ LINES TERMINATED BY '\r\n'
 IGNORE 1 LINES;
 ;
 
-LOAD DATA LOCAL INFILE "//Users/simone/Downloads/Housing-Database/Housing_Database - Applicant.csv" 
+LOAD DATA LOCAL INFILE "//Users/simone/Downloads/Housing-Database/Housing_Database - Waitlisted_applicant.csv" 
 INTO TABLE APPLICANT
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\r\n'
