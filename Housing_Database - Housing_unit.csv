@@ -9,7 +9,7 @@ Building_number,Apt_number,Bedroom_number,Max_people,Married_couple_allowed,Bed_
 2,202,1,2,1,2,Suite,1,3600
 2,203,2,3,0,3,Suite,1,2500
 3,300,1,1,0,1,Suite,1,4500
-4,400,2,4,0,4,Apt,0,3300
+4,400,4,4,0,4,Apt,1,4000
 4,401,2,4,0,4,Apt,0,3300
 4,402,2,4,0,4,Apt,0,3300
-4,403,4,4,0,4,Apt,1,4000
+4,403,2,4,0,4,Apt,0,3300
