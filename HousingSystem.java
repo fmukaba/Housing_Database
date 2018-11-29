@@ -230,19 +230,20 @@ public class HousingSystem {
         return list;
     }
 
-    public boolean checkResident(String username, String password) throws SQLException {
-        boolean check = false;
-        String query = "SELECT username, password " +
-                "From Resident";
-        PreparedStatement p = conn.prepareStatement(query);
-        p.clearParameters();
-        ResultSet r = p.executeQuery();
-        while (r.next()) {
-            if(r.getString(1).equals(username) && r.getString(2).equals(password)) {
-                check = true;
-            }
-        }
-        return check;
+         public boolean checkResident(String username, String password) throws SQLException {
+    	   boolean check = false;
+    	   String query = "SELECT Username, password " +
+                   "From Resident, User "
+                   + "where User.ID_Number = Resident.ID_Number";
+           PreparedStatement p = conn.prepareStatement(query);
+           p.clearParameters();
+           ResultSet r = p.executeQuery();
+           while (r.next()) {
+               if(r.getString(1).equals(username) && r.getString(2).equals(password)) {
+            	   check = true;
+               }
+           }
+           return check;
     }
 }
 
