@@ -6,12 +6,22 @@
 import java.util.Objects;
 
 public class HousingUnit {
-    private int building;
-    private int bedrooms;
-    private String type;
-    private boolean married;
-    private int price;
+    private int building;       // Building number
+    private int bedrooms;       // Number of bedrooms
+    private String type;        // Type of housing unit
+    private boolean married;    // True indicates married couples allowed
+    private int price;          // Price of the housing unit
 
+    // Creates default housing unit with null values
+    public HousingUnit() {
+        this.building = -1;
+        this.bedrooms = -1;
+        this.type = "NULL";
+        this.married = false;
+        this.price = -1;
+    }
+
+    // Creates housing unit with given attributes
     public HousingUnit(int building, int bedrooms, String type, boolean married, int price) {
         this.building = building;
         this.bedrooms = bedrooms;
@@ -20,14 +30,7 @@ public class HousingUnit {
         this.price = price;
     }
 
-    public HousingUnit(){
-        this.building = -1;
-        this.bedrooms = -1;
-        this.type = "null";
-        this.married = false;
-        this.price = -1;
-    }
-
+    //GETTERS
     public int getBuilding() {
         return building;
     }
@@ -44,6 +47,7 @@ public class HousingUnit {
 
     public int getPrice() { return price; }
 
+    //SETTERS
     public void setBuilding(int building) {
         this.building = building;
     }
@@ -76,4 +80,14 @@ public class HousingUnit {
                 Objects.equals(type, that.type);
     }
 
+    @Override
+    public String toString() {
+        return "HousingUnit{" +
+                "building=" + building +
+                ", bedrooms=" + bedrooms +
+                ", type='" + type + '\'' +
+                ", married=" + married +
+                ", price=" + price +
+                '}';
+    }
 }

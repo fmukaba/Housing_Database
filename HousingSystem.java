@@ -71,7 +71,7 @@ public class HousingSystem {
     }
 
     // Assigns an applicant a room depending on availability of inputted preferences
-    public String checkHousing(String SID, ArrayList<HousingUnit> preferences, String roommate) throws SQLException {
+    public String bookHousing(String SID, ArrayList<HousingUnit> preferences, String roommate) throws SQLException {
         int bNo = 0;
         int aptNo = 0;
         String query = "SELECT H.Occupation_status, H.Apt_Number, H.Building_number from HOUSING_UNIT H where " +
@@ -86,7 +86,7 @@ public class HousingSystem {
                 aptNo = r.getInt(2);
                 bNo = r.getInt(3);
                 createResident(SID, aptNo, bNo);
-                return "Building No.: " + bNo + ", Unit No.: " + aptNo;
+                return "Building No. " + bNo + ", Unit No. " + aptNo;
             }
         }
         ArrayList<HousingUnit> availableUnits = checkAvailability();
@@ -105,7 +105,7 @@ public class HousingSystem {
                         bNo = r2.getInt(2);
                         createResident(SID, aptNo, bNo);
                     }
-                    return "Building No.: " + bNo + ", Unit No.: " + aptNo;
+                    return "Building No. " + bNo + ", Unit No. " + aptNo;
                 }
             }
         }
@@ -113,15 +113,6 @@ public class HousingSystem {
         //Add applicant to database pending confirmation
         createApplicant(SID, preferences, roommate);
         return null;
-    }
-
-    public void bookHousing(String SID) throws SQLException {
-        // delete resident
-        String query2 = "DELETE FROM RESIDENT WHERE ID_number = ?";
-        PreparedStatement p2 = conn.prepareStatement(query2);
-        p2.setString(1, SID);
-        p2.execute();
-
     }
 
     // If room booking goes through, create a resident and add them to the database
@@ -186,7 +177,7 @@ public class HousingSystem {
             return;
         }
 
-        String query = "INSERT INTO APPLICANT(ID_number, Staff_ID) VALUES (?, ?)";
+        String query = "INSERT INTO WAITLISTED_APPLICANT(ID_number, Staff_ID) VALUES (?, ?)";
         PreparedStatement p = conn.prepareStatement(query);
         p.setString(1, ID);
         p.setString(2, resStaffID);
@@ -194,7 +185,7 @@ public class HousingSystem {
 
         int index = 1;
         for (HousingUnit h : preferences) {
-            String query2 = "INSERT INTO HOUSING_PREFERENCES(ID_number, Building_preference, Housing_type_preference, " +
+            String query2 = "INSERT INTO HOUSING_PREFERENCE(ID_number, Building_preference, Housing_type_preference, " +
                     "Bedroom_preference, Order_of_preference, Roommate_preference) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement p2 = conn.prepareStatement(query2);
             p2.setString(1, ID);
@@ -216,7 +207,7 @@ public class HousingSystem {
 
         String query = "SELECT U.Name, R.Building_number, R.Apt_number, M.Submission_date, M.Date_Completed, " +
                 "M.Comments, M.Issue_desc FROM RESIDENT R, MAINTENANCE_REQUEST M, USER U " +
-                "WHERE M.Resident_ID = R.ID_number and R.ID_number = U.ID_number AND Status = 'In process' " +
+                "WHERE M.Resident_ID = R.ID_number and R.ID_number = U.ID_number AND Status_request = 'pending' " +
                 "ORDER BY M.submission_date DESC";
         PreparedStatement p = conn.prepareStatement(query);
         // p.setString(1, CurrentDate);
@@ -230,20 +221,21 @@ public class HousingSystem {
         return list;
     }
 
-         public boolean checkResident(String username, String password) throws SQLException {
-    	   boolean check = false;
-    	   String query = "SELECT Username, password " +
-                   "From Resident, User "
-                   + "where User.ID_Number = Resident.ID_Number";
-           PreparedStatement p = conn.prepareStatement(query);
-           p.clearParameters();
-           ResultSet r = p.executeQuery();
-           while (r.next()) {
-               if(r.getString(1).equals(username) && r.getString(2).equals(password)) {
-            	   check = true;
-               }
-           }
-           return check;
+    public boolean checkResident(String username, String password) throws SQLException {
+        boolean check = false;
+        String query = "SELECT Username, password " +
+                "From RESIDENT, USER "
+                + "where USER.ID_Number = RESIDENT.ID_Number";
+        PreparedStatement p = conn.prepareStatement(query);
+        p.clearParameters();
+        ResultSet r = p.executeQuery();
+        while (r.next()) {
+            if (r.getString(1).equals(username) && r.getString(2).equals(password)) {
+                check = true;
+            }
+        }
+        return check;
     }
+
 }
 
